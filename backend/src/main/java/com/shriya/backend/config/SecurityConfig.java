@@ -21,9 +21,11 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .anyRequest().authenticated()
-                )
+        .requestMatchers("/api/auth/**").permitAll()
+        .requestMatchers("/api/profile/**").permitAll()
+        .anyRequest().authenticated()
+        
+)
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();

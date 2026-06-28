@@ -3,6 +3,7 @@ package com.shriya.backend.entity;
 import com.shriya.backend.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
+import jakarta.persistence.CascadeType;
 
 import java.time.LocalDateTime;
 
@@ -34,4 +35,7 @@ public class User {
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+private StudentProfile studentProfile;
 }
