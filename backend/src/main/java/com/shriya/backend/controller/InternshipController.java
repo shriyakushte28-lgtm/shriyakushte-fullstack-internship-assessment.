@@ -56,4 +56,14 @@ public List<Internship> location(@RequestParam String location) {
 public List<Internship> remote() {
     return internshipService.getRemoteInternships();
 }
+
+@GetMapping("/latest")
+public List<Internship> getLatestInternships() {
+    return internshipService.getLatestInternships();
+}
+
+@GetMapping("/count")
+public Long getInternshipCount() {
+    return internshipService.getInternshipCount();
+}
 }

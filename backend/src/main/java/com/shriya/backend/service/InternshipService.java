@@ -81,4 +81,12 @@ public List<Internship> searchByLocation(String location) {
 public List<Internship> getRemoteInternships() {
     return internshipRepository.findByIsRemote(true);
 }
+
+public List<Internship> getLatestInternships() {
+    return internshipRepository.findTop6ByOrderByCreatedAtDesc();
+}
+
+public Long getInternshipCount() {
+    return internshipRepository.count();
+}
 }

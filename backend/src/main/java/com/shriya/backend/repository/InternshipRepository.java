@@ -15,4 +15,6 @@ public interface InternshipRepository extends JpaRepository<Internship, Long> {
     List<Internship> findByTitleContainingIgnoreCase(String title);
 
     List<Internship> findByIsRemote(Boolean isRemote);
+
+    List<Internship> findTop6ByOrderByCreatedAtDesc();
 }
