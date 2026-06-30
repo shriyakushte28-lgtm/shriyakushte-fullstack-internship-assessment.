@@ -2,6 +2,7 @@ package com.shriya.backend.controller;
 
 import com.shriya.backend.dto.ApplicationRequest;
 import com.shriya.backend.entity.Application;
+import com.shriya.backend.enums.ApplicationStatus;
 import com.shriya.backend.service.ApplicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +38,22 @@ public String test() {
 @PostMapping("/test")
 public String postTest() {
     return "POST OK";
+}
+
+@GetMapping
+public List<Application> getAllApplications() {
+
+    return applicationService.getAllApplications();
+
+}
+
+@PutMapping("/{id}/status")
+public Application updateStatus(
+        @PathVariable Long id,
+        @RequestParam ApplicationStatus status) {
+
+    return applicationService.updateStatus(id, status);
+
 }
 
 }

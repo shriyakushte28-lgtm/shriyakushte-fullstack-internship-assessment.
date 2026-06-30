@@ -17,4 +17,6 @@ public interface InternshipRepository extends JpaRepository<Internship, Long> {
     List<Internship> findByIsRemote(Boolean isRemote);
 
     List<Internship> findTop6ByOrderByCreatedAtDesc();
+
+    long countByStatus(InternshipStatus status);
 }

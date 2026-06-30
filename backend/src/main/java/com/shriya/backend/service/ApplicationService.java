@@ -40,19 +40,11 @@ public class ApplicationService {
             );
         }
 
-        System.out.println("Finding student...");
-
         StudentProfile student = studentProfileRepository.findById(request.getStudentId())
                 .orElseThrow(() -> new RuntimeException("Student not found"));
 
-        System.out.println("Student found: " + student.getId());
-
-        System.out.println("Finding internship...");
-
         Internship internship = internshipRepository.findById(request.getInternshipId())
                 .orElseThrow(() -> new RuntimeException("Internship not found"));
-
-        System.out.println("Internship found: " + internship.getId());
 
         Application application = Application.builder()
                 .student(student)
@@ -63,18 +55,7 @@ public class ApplicationService {
                 .appliedAt(LocalDateTime.now())
                 .build();
 
-        System.out.println("Saving application...");
-
-        Application saved = applicationRepository.save(application);
-
-        System.out.println("Saved successfully!");
-
-        return saved;
-
-    } catch (Exception e) {
-        e.printStackTrace();
-        throw e;
-    }
+        return applicationRepository.save(application);
 }
 
     public List<Application> getStudentApplications(Long studentId) {
@@ -83,4 +64,20 @@ public class ApplicationService {
 
     }
 
+    public List<Application> getAllApplications() {
+
+        return applicationRepository.findAllByOrderByAppliedAtDesc();
+
+    }
+
+    public Application updateStatus(Long id, ApplicationStatus status) {
+
+        Application application = applicationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Application not found"));
+
+        application.setStatus(status);
+
+        return applicationRepository.save(application);
+
+    }
 }

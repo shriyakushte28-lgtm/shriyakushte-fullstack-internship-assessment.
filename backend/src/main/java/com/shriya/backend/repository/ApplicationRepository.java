@@ -11,4 +11,6 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
 
     boolean existsByStudentIdAndInternshipId(Long studentId, Long internshipId);
 
+    List<Application> findAllByOrderByAppliedAtDesc();
+
 }
