@@ -2,6 +2,7 @@ package com.shriya.backend.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "student_profiles")
@@ -18,6 +19,7 @@ public class StudentProfile {
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnoreProperties("studentProfile")
     private User user;
 
     @Column(name = "full_name", nullable = false)

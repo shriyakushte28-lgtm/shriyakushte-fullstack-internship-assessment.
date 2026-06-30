@@ -8,3 +8,6 @@ export const getLatestInternships = () =>
 
 export const getInternshipCount = () =>
     api.get("/internships/count");
+
+export const getInternshipById = (id) =>
+    api.get(`/internships/${id}`);
