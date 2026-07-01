@@ -1,4 +1,58 @@
+import { useEffect, useState } from "react";
+import { getStudentApplications } from "../../services/applicationService";
+
 function RecentApplications() {
+
+    const userId = Number(localStorage.getItem("userId"));
+
+    const [applications, setApplications] = useState([]);
+
+    useEffect(() => {
+
+        loadApplications();
+
+    }, []);
+
+    async function loadApplications() {
+
+        try {
+
+            const response = await getStudentApplications(userId);
+
+            setApplications(response.data);
+
+        }
+
+        catch (error) {
+
+            console.log(error);
+
+        }
+
+    }
+
+    function getStatusColor(status) {
+
+        switch (status) {
+
+            case "PENDING":
+                return "text-yellow-600 font-semibold";
+
+            case "SHORTLISTED":
+                return "text-green-600 font-semibold";
+
+            case "ACCEPTED":
+                return "text-blue-600 font-semibold";
+
+            case "REJECTED":
+                return "text-red-600 font-semibold";
+
+            default:
+                return "";
+
+        }
+
+    }
 
     return (
 
@@ -18,7 +72,11 @@ function RecentApplications() {
 
                         <th className="text-left py-3">Internship</th>
 
+                        <th className="text-left">Company</th>
+
                         <th>Status</th>
+
+                        <th>Applied On</th>
 
                     </tr>
 
@@ -26,21 +84,59 @@ function RecentApplications() {
 
                 <tbody>
 
-                    <tr>
+                    {applications.length === 0 ? (
 
-                        <td className="py-5">
+                        <tr>
 
-                            No applications yet
+                            <td
+                                colSpan="4"
+                                className="py-6 text-center text-gray-500"
+                            >
+                                No applications yet.
+                            </td>
 
-                        </td>
+                        </tr>
 
-                        <td>
+                    ) : (
 
-                            --
+                        applications.map((application) => (
 
-                        </td>
+                            <tr
+                                key={application.id}
+                                className="border-b"
+                            >
 
-                    </tr>
+                                <td className="py-4">
+
+                                    {application.internship.title}
+
+                                </td>
+
+                                <td>
+
+                                    {application.internship.companyName}
+
+                                </td>
+
+                                <td
+                                    className={getStatusColor(application.status)}
+                                >
+
+                                    {application.status}
+
+                                </td>
+
+                                <td>
+
+                                    {application.appliedAt.substring(0, 10)}
+
+                                </td>
+
+                            </tr>
+
+                        ))
+
+                    )}
 
                 </tbody>
 

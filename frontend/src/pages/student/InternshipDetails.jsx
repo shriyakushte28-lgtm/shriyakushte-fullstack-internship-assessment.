@@ -40,7 +40,7 @@ function InternshipDetails() {
 
         await applyInternship({
 
-            studentId: 1,
+            studentId: Number(localStorage.getItem("userId")),
             internshipId: internship.id,
             coverLetter: "",
             resumeUrl: "resume.pdf"

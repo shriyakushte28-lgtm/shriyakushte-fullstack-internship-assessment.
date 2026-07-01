@@ -26,7 +26,7 @@ function Sidebar() {
                     My Applications
                 </Link>
 
-                <Link className="block p-3 rounded-xl hover:bg-blue-100" to="/internships">
+                <Link className="block p-3 rounded-xl hover:bg-blue-100" to="/profile">
                     Profile
                 </Link>
 

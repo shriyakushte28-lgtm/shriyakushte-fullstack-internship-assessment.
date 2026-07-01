@@ -4,6 +4,9 @@ import com.shriya.backend.enums.InternshipStatus;
 import com.shriya.backend.repository.ApplicationRepository;
 import com.shriya.backend.repository.InternshipRepository;
 import com.shriya.backend.repository.StudentProfileRepository;
+import com.shriya.backend.service.ApplicationService;
+import com.shriya.backend.entity.Application;
+import com.shriya.backend.enums.ApplicationStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +21,7 @@ public class AdminController {
     private final StudentProfileRepository studentProfileRepository;
     private final InternshipRepository internshipRepository;
     private final ApplicationRepository applicationRepository;
+    private final ApplicationService applicationService;
 
     @GetMapping("/statistics")
     public Map<String, Long> statistics() {
@@ -36,5 +40,15 @@ public class AdminController {
         return data;
 
     }
+
+    @PutMapping("/applications/{id}/status")
+public Application updateApplicationStatus(
+        @PathVariable Long id,
+        @RequestParam ApplicationStatus status
+) {
+
+    return applicationService.updateStatus(id, status);
+
+}
 
 }

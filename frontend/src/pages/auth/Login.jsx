@@ -1,115 +1,114 @@
 import { useState } from "react";
-import { login } from "../../services/authService";
+import { useNavigate, Link } from "react-router-dom";
+import api from "../../services/api";
 
 function Login() {
+
+    const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         email: "",
         password: ""
     });
 
-    const handleChange = (e) => {
+    function handleChange(e) {
 
         setFormData({
             ...formData,
             [e.target.name]: e.target.value
         });
 
-    };
+    }
 
-    const handleSubmit = async (e) => {
+    async function handleSubmit(e) {
 
         e.preventDefault();
 
         try {
 
-            const response = await login(formData);
+            const response = await api.post(
+                "/auth/login",
+                formData
+            );
 
-            console.log(response.data);
+            localStorage.setItem(
+                "token",
+                response.data.token
+            );
 
-            localStorage.setItem("token", response.data.token);
+            localStorage.setItem(
+                "userId",
+                response.data.id
+            );
 
-            alert("Login Successful");
+            localStorage.setItem(
+                "fullName",
+                response.data.fullName
+            );
 
-        } catch (error) {
+            localStorage.setItem(
+                "role",
+                response.data.role
+            );
 
-            alert("Invalid Credentials");
+            if (response.data.role === "ADMIN") {
 
-            console.log(error);
+                navigate("/admin/dashboard");
+
+            }
+
+            else {
+
+                navigate("/dashboard");
+
+            }
 
         }
 
-    };
+        catch (error) {
+
+            console.log(error);
+
+            alert("Invalid Email or Password");
+
+        }
+
+    }
 
     return (
 
-        <div className="min-h-screen flex">
+        <div className="min-h-screen flex justify-center items-center bg-slate-100">
 
-            {/* Left Side */}
+            <div className="bg-white rounded-2xl shadow p-10 w-[420px]">
 
-            <div className="w-1/2 bg-blue-600 text-white flex flex-col justify-center px-20">
+                <h1 className="text-3xl font-bold mb-6">
 
-                <h1 className="text-6xl font-bold">
-
-                    InternSphere
+                    Login
 
                 </h1>
 
-                <p className="mt-8 text-xl">
-
-                    Launch your career with verified internship opportunities.
-
-                </p>
-
-            </div>
-
-            {/* Right Side */}
-
-            <div className="w-1/2 flex justify-center items-center">
-
                 <form
                     onSubmit={handleSubmit}
-                    className="bg-white shadow-xl rounded-2xl p-10 w-[450px]"
+                    className="space-y-4"
                 >
 
-                    <h2 className="text-4xl font-bold">
-
-                        Welcome Back
-
-                    </h2>
-
                     <input
-
-                        type="email"
-
                         name="email"
-
                         placeholder="Email"
-
+                        className="border p-3 rounded-lg w-full"
                         onChange={handleChange}
-
-                        className="w-full border p-4 rounded-xl mt-8"
-
                     />
 
                     <input
-
                         type="password"
-
                         name="password"
-
                         placeholder="Password"
-
+                        className="border p-3 rounded-lg w-full"
                         onChange={handleChange}
-
-                        className="w-full border p-4 rounded-xl mt-5"
-
                     />
 
                     <button
-
-                        className="w-full bg-blue-600 text-white py-4 rounded-xl mt-8"
-
+                        className="bg-blue-600 text-white w-full p-3 rounded-lg"
                     >
 
                         Login
@@ -117,6 +116,19 @@ function Login() {
                     </button>
 
                 </form>
+
+                <p className="mt-6 text-center">
+
+                    Don't have an account?
+
+                    <Link
+                        to="/register"
+                        className="text-blue-600 ml-2"
+                    >
+                        Register
+                    </Link>
+
+                </p>
 
             </div>
 

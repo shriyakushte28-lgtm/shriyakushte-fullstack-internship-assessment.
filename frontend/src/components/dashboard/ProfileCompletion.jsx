@@ -1,4 +1,55 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { getProfile } from "../../services/profileService";
+
 function ProfileCompletion() {
+
+    const navigate = useNavigate();
+
+    const userId = Number(localStorage.getItem("userId"));
+
+    const [percentage, setPercentage] = useState(0);
+
+    useEffect(() => {
+
+        loadProfile();
+
+    }, []);
+
+    async function loadProfile() {
+
+        try {
+
+            const response = await getProfile(userId);
+
+            const profile = response.data;
+
+            const fields = [
+
+                profile.fullName,
+                profile.phone,
+                profile.college,
+                profile.degree,
+                profile.graduationYear,
+                profile.skills,
+                profile.resumeUrl,
+                profile.bio
+
+            ];
+
+            const completed = fields.filter(field => field).length;
+
+            setPercentage(Math.round((completed / fields.length) * 100));
+
+        }
+
+        catch (error) {
+
+            setPercentage(0);
+
+        }
+
+    }
 
     return (
 
@@ -14,21 +65,24 @@ function ProfileCompletion() {
 
                 <div
                     className="bg-blue-600 h-4 rounded-full"
-                    style={{ width: "60%" }}
-                ></div>
+                    style={{ width: `${percentage}%` }}
+                />
 
             </div>
 
             <p className="mt-4 text-gray-500">
 
-                60% Completed
+                {percentage}% Completed
 
             </p>
 
             <button
+                onClick={() => navigate("/profile")}
                 className="mt-6 bg-blue-600 text-white px-5 py-3 rounded-xl"
             >
-                Complete Profile
+
+                Edit Profile
+
             </button>
 
         </div>

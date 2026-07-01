@@ -1,4 +1,10 @@
+import { useNavigate } from "react-router-dom";
+
 function WelcomeBanner() {
+
+    const navigate = useNavigate();
+
+    const fullName = localStorage.getItem("fullName") || "Student";
 
     return (
 
@@ -6,7 +12,7 @@ function WelcomeBanner() {
 
             <h1 className="text-4xl font-bold">
 
-                Welcome back 👋
+                Welcome back, {fullName} 👋
 
             </h1>
 
@@ -16,7 +22,10 @@ function WelcomeBanner() {
 
             </p>
 
-            <button className="mt-8 bg-white text-blue-600 px-6 py-3 rounded-xl">
+            <button
+                onClick={() => navigate("/internships")}
+                className="mt-8 bg-white text-blue-600 px-6 py-3 rounded-xl hover:bg-gray-100"
+            >
 
                 Browse Internships
 

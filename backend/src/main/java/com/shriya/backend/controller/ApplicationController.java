@@ -1,6 +1,7 @@
 package com.shriya.backend.controller;
 
 import com.shriya.backend.dto.ApplicationRequest;
+import com.shriya.backend.dto.ApplicationSummaryResponse;
 import com.shriya.backend.entity.Application;
 import com.shriya.backend.enums.ApplicationStatus;
 import com.shriya.backend.service.ApplicationService;
@@ -53,6 +54,15 @@ public Application updateStatus(
         @RequestParam ApplicationStatus status) {
 
     return applicationService.updateStatus(id, status);
+
+}
+
+@GetMapping("/student/{studentId}/summary")
+public ApplicationSummaryResponse getSummary(
+        @PathVariable Long studentId
+) {
+
+    return applicationService.getSummary(studentId);
 
 }
 

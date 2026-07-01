@@ -14,6 +14,7 @@ import MyApplications from "./pages/student/MyApplications";
 import AdminDashboard from "./pages/admin/Dashboard";
 import ManageInternships from "./pages/admin/ManageInternships";
 import ManageApplications from "./pages/admin/ManageApplications";
+import Profile from "./pages/student/Profile";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -39,6 +40,8 @@ createRoot(document.getElementById("root")).render(
         <Route path="/admin/internships" element={<ManageInternships />} />
 
         <Route path="/admin/applications" element={<ManageApplications />} />
+
+        <Route path="/profile" element={<Profile />} />
 
       </Routes>
     </BrowserRouter>

@@ -1,3 +1,5 @@
+import NotificationBell from "./NotificationBell";
+
 function TopNavbar() {
 
     return (
@@ -16,15 +18,19 @@ function TopNavbar() {
 
             <div className="flex items-center gap-6">
 
-                🔔
+    <NotificationBell />
 
-                <div className="w-11 h-11 rounded-full bg-blue-600 text-white flex items-center justify-center">
+    <div
+        className="w-11 h-11 rounded-full
+        bg-blue-600 text-white
+        flex items-center justify-center"
+    >
 
-                    S
+        {localStorage.getItem("fullName")?.charAt(0).toUpperCase()}
 
-                </div>
+    </div>
 
-            </div>
+</div>
 
         </header>
 

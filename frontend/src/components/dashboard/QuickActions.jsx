@@ -1,4 +1,8 @@
+import { useNavigate } from "react-router-dom";
+
 function QuickActions() {
+
+    const navigate = useNavigate();
 
     return (
 
@@ -10,24 +14,27 @@ function QuickActions() {
 
             </h2>
 
-            <div className="flex gap-4 mt-6">
+            <div className="flex gap-4 mt-6 flex-wrap">
 
-                <button className="bg-blue-600 text-white px-6 py-3 rounded-xl">
-
+                <button
+                    onClick={() => navigate("/internships")}
+                    className="bg-blue-600 text-white px-6 py-3 rounded-xl"
+                >
                     Browse Internships
-
                 </button>
 
-                <button className="bg-green-600 text-white px-6 py-3 rounded-xl">
-
+                <button
+                    onClick={() => navigate("/profile")}
+                    className="bg-green-600 text-white px-6 py-3 rounded-xl"
+                >
                     Edit Profile
-
                 </button>
 
-                <button className="bg-purple-600 text-white px-6 py-3 rounded-xl">
-
-                    Upload Resume
-
+                <button
+                    onClick={() => navigate("/applications")}
+                    className="bg-purple-600 text-white px-6 py-3 rounded-xl"
+                >
+                    My Applications
                 </button>
 
             </div>

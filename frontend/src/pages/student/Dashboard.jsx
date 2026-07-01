@@ -14,6 +14,10 @@ import ProfileCompletion from "../../components/dashboard/ProfileCompletion";
 
 import Notifications from "../../components/dashboard/Notifications";
 
+import NotificationBell from "../../components/dashboard/NotificationBell";
+
+
+
 function Dashboard() {
 
     return (

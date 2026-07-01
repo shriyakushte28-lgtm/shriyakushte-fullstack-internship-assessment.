@@ -40,4 +40,31 @@ public class StudentProfileService {
 
         return "Profile created successfully";
     }
+
+    public StudentProfile getProfile(Long userId) {
+
+    return profileRepository.findByUserId(userId)
+            .orElseThrow(() -> new RuntimeException("Profile not found"));
+
+}
+
+public String updateProfile(Long userId, StudentProfileRequest request) {
+
+    StudentProfile profile = profileRepository.findByUserId(userId)
+            .orElseThrow(() -> new RuntimeException("Profile not found"));
+
+    profile.setFullName(request.getFullName());
+    profile.setPhone(request.getPhone());
+    profile.setCollege(request.getCollege());
+    profile.setDegree(request.getDegree());
+    profile.setGraduationYear(request.getGraduationYear());
+    profile.setSkills(request.getSkills());
+    profile.setResumeUrl(request.getResumeUrl());
+    profile.setBio(request.getBio());
+
+    profileRepository.save(profile);
+
+    return "Profile updated successfully";
+
+}
 }

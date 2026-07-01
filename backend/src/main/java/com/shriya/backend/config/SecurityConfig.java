@@ -29,6 +29,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/internships/**").permitAll()
                         .requestMatchers("/api/applications/**").permitAll()
                         .requestMatchers("/api/admin/**").permitAll()
+                        .requestMatchers("/api/notifications/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(httpBasic -> httpBasic.disable());
