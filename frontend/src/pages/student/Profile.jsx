@@ -5,6 +5,7 @@ import {
     createProfile,
     updateProfile
 } from "../../services/profileService";
+import { uploadResume } from "../../services/resumeService";
 
 function Profile() {
 
@@ -24,6 +25,10 @@ function Profile() {
         bio: ""
 
     });
+
+    const [resumeFile, setResumeFile] = useState(null);
+
+    const [uploading, setUploading] = useState(false);
 
     useEffect(() => {
 
@@ -103,6 +108,58 @@ function Profile() {
 
     }
 
+    async function handleResumeUpload() {
+
+    if (!resumeFile) {
+
+        alert("Please select a PDF.");
+
+        return;
+
+    }
+
+    try {
+
+        setUploading(true);
+
+        const response = await uploadResume(
+
+            userId,
+
+            resumeFile
+
+        );
+
+        setFormData({
+
+            ...formData,
+
+            resumeUrl: response.data.fileUrl
+
+        });
+
+        alert("Resume Uploaded Successfully!");
+
+        loadProfile();
+
+    }
+
+    catch (error) {
+
+        console.log(error);
+
+        alert("Resume upload failed.");
+
+    }
+
+    finally {
+
+        setUploading(false);
+
+    }
+
+}
+
     return (
 
         <DashboardLayout>
@@ -166,14 +223,6 @@ function Profile() {
                     className="border p-3 rounded-lg w-full"
                 />
 
-                <input
-                    name="resumeUrl"
-                    value={formData.resumeUrl || ""}
-                    onChange={handleChange}
-                    placeholder="Resume URL"
-                    className="border p-3 rounded-lg w-full"
-                />
-
                 <textarea
                     name="bio"
                     value={formData.bio || ""}
@@ -182,6 +231,94 @@ function Profile() {
                     rows="4"
                     className="border p-3 rounded-lg w-full"
                 />
+
+                <div>
+
+    <label className="block font-semibold mb-2">
+
+        Resume
+
+    </label>
+
+    {
+
+        formData.resumeUrl ?
+
+        (
+
+            <div className="mb-3">
+
+                <a
+
+                    href={`http://localhost:8080${formData.resumeUrl}`}
+
+                    target="_blank"
+
+                    rel="noreferrer"
+
+                    className="text-blue-600 underline"
+
+                >
+
+                    📄 View Uploaded Resume
+
+                </a>
+
+            </div>
+
+        )
+
+        :
+
+        (
+
+            <p className="text-gray-500 mb-3">
+
+                No Resume Uploaded
+
+            </p>
+
+        )
+
+    }
+
+    <input
+
+        type="file"
+
+        accept=".pdf"
+
+        onChange={(e) => setResumeFile(e.target.files[0])}
+
+        className="mb-3"
+
+    />
+
+    <button
+
+        type="button"
+
+        onClick={handleResumeUpload}
+
+        disabled={uploading}
+
+        className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg"
+
+    >
+
+        {
+
+            uploading
+
+                ? "Uploading..."
+
+                : "Upload Resume"
+
+        }
+
+    </button>
+
+</div>
 
                 <button
                     className="bg-blue-600 text-white px-8 py-3 rounded-xl"

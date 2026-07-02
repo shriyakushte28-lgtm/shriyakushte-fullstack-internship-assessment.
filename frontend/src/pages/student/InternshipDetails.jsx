@@ -15,6 +15,8 @@ import {
 
 import { applyInternship } from "../../services/applicationService";
 
+import { getProfile } from "../../services/profileService";
+
 function InternshipDetails() {
 
     const navigate = useNavigate();
@@ -27,6 +29,8 @@ function InternshipDetails() {
 
     const [match, setMatch] = useState(null);
 
+    const [profile, setProfile] = useState(null);
+
     const [saved, setSaved] = useState(false);
 
     const [saving, setSaving] = useState(false);
@@ -38,6 +42,8 @@ function InternshipDetails() {
         loadMatch();
 
         checkSaved();
+
+        loadProfile();
 
     }, [id]);
 
@@ -79,6 +85,16 @@ function InternshipDetails() {
 
     async function handleApply() {
 
+        if (!profile?.resumeUrl) {
+
+    alert("Please upload your resume before applying.");
+
+    navigate("/profile");
+
+    return;
+
+}
+
         try {
 
             await applyInternship({
@@ -89,7 +105,7 @@ function InternshipDetails() {
 
                 coverLetter: "",
 
-                resumeUrl: "resume.pdf"
+                resumeUrl: profile?.resumeUrl || ""
 
             });
 
@@ -178,6 +194,24 @@ async function handleSave() {
     finally {
 
         setSaving(false);
+
+    }
+
+}
+
+async function loadProfile() {
+
+    try {
+
+        const response = await getProfile(userId);
+
+        setProfile(response.data);
+
+    }
+
+    catch (error) {
+
+        console.log(error);
 
     }
 
