@@ -3,14 +3,10 @@ package com.shriya.backend.dto;
 import lombok.Data;
 
 @Data
-public class ApplicationRequest {
+public class SavedInternshipRequest {
 
     private Long userId;
 
     private Long internshipId;
-
-    private String coverLetter;
-
-    private String resumeUrl;
 
 }

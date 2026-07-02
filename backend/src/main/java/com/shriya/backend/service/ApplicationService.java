@@ -33,18 +33,27 @@ public class ApplicationService {
         System.out.println("===== APPLY METHOD CALLED =====");
         System.out.println(request);
 
-        if (applicationRepository.existsByStudentIdAndInternshipId(
-                request.getStudentId(),
-                request.getInternshipId())) {
+        StudentProfile student = studentProfileRepository
+        .findByUserId(request.getUserId())
+        .orElseThrow(() -> new RuntimeException("Student not found"));
 
-            throw new ResponseStatusException(
-                HttpStatus.CONFLICT,
-                "You have already applied for this internship."
-            );
-        }
+        System.out.println("Student Profile ID = " + student.getId());
+System.out.println("Internship ID = " + request.getInternshipId());
 
-        StudentProfile student = studentProfileRepository.findById(request.getStudentId())
-                .orElseThrow(() -> new RuntimeException("Student not found"));
+boolean alreadyApplied =
+        applicationRepository.existsByStudentIdAndInternshipId(
+                student.getId(),
+                request.getInternshipId());
+
+System.out.println("Already Applied = " + alreadyApplied);
+
+if (alreadyApplied) {
+
+    throw new ResponseStatusException(
+            HttpStatus.CONFLICT,
+            "You have already applied for this internship."
+    );
+}
 
         Internship internship = internshipRepository.findById(request.getInternshipId())
                 .orElseThrow(() -> new RuntimeException("Internship not found"));
@@ -61,11 +70,15 @@ public class ApplicationService {
         return applicationRepository.save(application);
 }
 
-    public List<Application> getStudentApplications(Long studentId) {
+    public List<Application> getUserApplications(Long userId) {
 
-        return applicationRepository.findByStudentId(studentId);
+    StudentProfile student = studentProfileRepository
+            .findByUserId(userId)
+            .orElseThrow(() -> new RuntimeException("Student not found"));
 
-    }
+    return applicationRepository.findByStudentId(student.getId());
+
+}
 
     public List<Application> getAllApplications() {
 
@@ -147,7 +160,13 @@ public class ApplicationService {
 
 }
 
-    public ApplicationSummaryResponse getSummary(Long studentId) {
+    public ApplicationSummaryResponse getSummary(Long userId) {
+
+    StudentProfile student = studentProfileRepository
+            .findByUserId(userId)
+            .orElseThrow(() -> new RuntimeException("Student not found"));
+
+    Long studentId = student.getId();
 
     return new ApplicationSummaryResponse(
 

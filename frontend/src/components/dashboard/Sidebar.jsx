@@ -14,27 +14,52 @@ function Sidebar() {
 
             <nav className="px-6 space-y-3">
 
-                <Link className="block p-3 rounded-xl hover:bg-blue-100" to="/dashboard">
+                <Link
+                    className="block p-3 rounded-xl hover:bg-blue-100"
+                    to="/dashboard"
+                >
                     Dashboard
                 </Link>
 
-                <Link className="block p-3 rounded-xl hover:bg-blue-100" to="/internships">
+                <Link
+                    className="block p-3 rounded-xl hover:bg-blue-100"
+                    to="/internships"
+                >
                     Browse Internships
                 </Link>
 
-                <Link className="block p-3 rounded-xl hover:bg-blue-100" to="/applications">
+                <Link
+                    className="block p-3 rounded-xl hover:bg-blue-100"
+                    to="/applications"
+                >
                     My Applications
                 </Link>
 
-                <Link className="block p-3 rounded-xl hover:bg-blue-100" to="/profile">
+                <Link
+                    className="block p-3 rounded-xl hover:bg-pink-100"
+                    to="/saved"
+                >
+                    ❤️ Saved Internships
+                </Link>
+
+                <Link
+                    className="block p-3 rounded-xl hover:bg-blue-100"
+                    to="/profile"
+                >
                     Profile
                 </Link>
 
-                <Link className="block p-3 rounded-xl hover:bg-blue-100" to="/internships">
+                <Link
+                    className="block p-3 rounded-xl hover:bg-blue-100"
+                    to="/settings"
+                >
                     Settings
                 </Link>
 
-                <Link className="block p-3 rounded-xl hover:bg-red-100 text-red-600" to="/">
+                <Link
+                    className="block p-3 rounded-xl hover:bg-red-100 text-red-600"
+                    to="/"
+                >
                     Logout
                 </Link>
 

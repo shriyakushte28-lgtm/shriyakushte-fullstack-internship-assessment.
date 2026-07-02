@@ -15,6 +15,14 @@ import AdminDashboard from "./pages/admin/Dashboard";
 import ManageInternships from "./pages/admin/ManageInternships";
 import ManageApplications from "./pages/admin/ManageApplications";
 import Profile from "./pages/student/Profile";
+import AdminLogin from "./pages/admin/AdminLogin";
+import ProtectedRoute from "./components/routes/ProtectedRoute";
+import StudentRoute from "./components/routes/StudentRoute";
+import AdminRoute from "./components/routes/AdminRoute";
+import Settings from "./pages/student/Settings";
+import ManageStudents from "./pages/admin/ManageStudents";
+import StudentDetails from "./pages/admin/StudentDetails";
+import MySavedInternships from "./pages/student/MySavedInternships";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -27,7 +35,16 @@ createRoot(document.getElementById("root")).render(
 
         <Route path="/register" element={<Register />} />
 
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route
+    path="/dashboard"
+    element={
+        <ProtectedRoute>
+            <StudentRoute>
+                <Dashboard />
+            </StudentRoute>
+        </ProtectedRoute>
+    }
+/>
 
         <Route path="/internships" element={<BrowseInternships />} />
 
@@ -35,13 +52,76 @@ createRoot(document.getElementById("root")).render(
 
         <Route path="/applications" element={<MyApplications />} />
 
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route
+    path="/admin/dashboard"
+    element={
+        <ProtectedRoute>
+            <AdminRoute>
+                <AdminDashboard />
+            </AdminRoute>
+        </ProtectedRoute>
+    }
+/>
 
         <Route path="/admin/internships" element={<ManageInternships />} />
 
         <Route path="/admin/applications" element={<ManageApplications />} />
 
         <Route path="/profile" element={<Profile />} />
+
+        <Route path="/admin/login" element={<AdminLogin />} />
+
+        <Route
+    path="/settings"
+    element={
+        <ProtectedRoute>
+            <StudentRoute>
+                <Settings />
+            </StudentRoute>
+        </ProtectedRoute>
+    }
+/>
+
+    <Route path="/routes/ProtectedRoute" element={<ProtectedRoute />} />
+
+    <Route path="/routes/StudentRoute" element={<StudentRoute />} />
+
+    <Route path="/routes/AdminRoute" element={<AdminRoute />} />
+
+    <Route path="/pages/student/Settings" element={<Settings />} />
+
+    <Route
+    path="/admin/students"
+    element={
+        <ProtectedRoute>
+            <AdminRoute>
+                <ManageStudents />
+            </AdminRoute>
+        </ProtectedRoute>
+    }
+/>
+
+    <Route
+    path="/admin/students/:id"
+    element={
+        <ProtectedRoute>
+            <AdminRoute>
+                <StudentDetails />
+            </AdminRoute>
+        </ProtectedRoute>
+    }
+/>
+
+<Route
+    path="/saved"
+    element={
+        <ProtectedRoute>
+            <StudentRoute>
+                <MySavedInternships />
+            </StudentRoute>
+        </ProtectedRoute>
+    }
+/>
 
       </Routes>
     </BrowserRouter>

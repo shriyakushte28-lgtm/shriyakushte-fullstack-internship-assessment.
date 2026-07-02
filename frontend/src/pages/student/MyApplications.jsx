@@ -5,6 +5,7 @@ import { getStudentApplications } from "../../services/applicationService";
 function MyApplications() {
 
     const [applications, setApplications] = useState([]);
+    const userId = Number(localStorage.getItem("userId"));
 
     useEffect(() => {
 
@@ -16,7 +17,7 @@ function MyApplications() {
 
         try {
 
-            const response = await getStudentApplications(1);
+            const response = await getStudentApplications(userId);
 
             setApplications(response.data);
 

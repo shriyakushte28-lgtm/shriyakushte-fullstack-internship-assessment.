@@ -15,17 +15,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NotificationService {
 
-    private static final Long Long = null;
     private final NotificationRepository notificationRepository;
     private final StudentProfileRepository studentProfileRepository;
 
     public Notification create(NotificationRequest request) {
-
-        System.out.println("========== Notification Request ==========");
-        System.out.println("Student ID = " + request.getStudentId());
-        System.out.println("Title = " + request.getTitle());
-        System.out.println("Message: " + request.getMessage());
-        System.out.println("Type = " + request.getType());
 
         StudentProfile student = studentProfileRepository.findById(
                 request.getStudentId())
@@ -72,7 +65,7 @@ public void markAsRead(Long notificationId) {
             .findById(notificationId)
             .orElseThrow(() -> new RuntimeException("Notification not found"));
 
-    notification.setIsRead(true);
+    notification.setRead(true);
 
     notificationRepository.save(notification);
 

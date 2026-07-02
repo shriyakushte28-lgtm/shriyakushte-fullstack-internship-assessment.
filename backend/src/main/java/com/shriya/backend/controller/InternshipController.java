@@ -3,6 +3,8 @@ package com.shriya.backend.controller;
 import com.shriya.backend.dto.InternshipRequest;
 import com.shriya.backend.entity.Internship;
 import com.shriya.backend.service.InternshipService;
+import com.shriya.backend.dto.RecommendedInternshipResponse;
+import com.shriya.backend.dto.InternshipMatchResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -66,5 +68,22 @@ public List<Internship> getLatestInternships() {
 @GetMapping("/count")
 public Long getInternshipCount() {
     return internshipService.getInternshipCount();
+}
+
+@GetMapping("/recommended/{userId}")
+public List<RecommendedInternshipResponse> getRecommendedInternships(
+        @PathVariable Long userId) {
+
+    return internshipService.getRecommendedInternships(userId);
+
+}
+
+@GetMapping("/{internshipId}/match/{userId}")
+public InternshipMatchResponse getMatch(
+        @PathVariable Long internshipId,
+        @PathVariable Long userId) {
+
+    return internshipService.getInternshipMatch(internshipId, userId);
+
 }
 }

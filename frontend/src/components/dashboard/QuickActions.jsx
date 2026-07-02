@@ -18,24 +18,37 @@ function QuickActions() {
 
                 <button
                     onClick={() => navigate("/internships")}
-                    className="bg-blue-600 text-white px-6 py-3 rounded-xl"
+                    className="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700"
                 >
+
                     Browse Internships
+
                 </button>
 
                 <button
                     onClick={() => navigate("/profile")}
-                    className="bg-green-600 text-white px-6 py-3 rounded-xl"
+                    className="bg-green-600 text-white px-6 py-3 rounded-xl hover:bg-green-700"
                 >
+
                     Edit Profile
+
                 </button>
 
                 <button
-                    onClick={() => navigate("/applications")}
-                    className="bg-purple-600 text-white px-6 py-3 rounded-xl"
+                    onClick={() => navigate("/settings")}
+                    className="bg-purple-600 text-white px-6 py-3 rounded-xl hover:bg-purple-700"
                 >
-                    My Applications
+
+                    Settings
+
                 </button>
+
+                <button
+    onClick={() => navigate("/saved")}
+    className="bg-pink-600 hover:bg-pink-700 text-white rounded-xl p-5"
+>
+    ❤️ Saved Internships
+</button>
 
             </div>
 

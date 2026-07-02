@@ -8,3 +8,6 @@ export const createProfile = (userId, data) =>
 
 export const updateProfile = (userId, data) =>
     api.put(`/profile/${userId}`, data);
+
+export const getProfileCompletion = (userId) =>
+    api.get(`/profile/${userId}/completion`);

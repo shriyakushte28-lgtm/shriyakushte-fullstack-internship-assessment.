@@ -1,6 +1,20 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function AdminSidebar() {
+
+    const navigate = useNavigate();
+
+    function logout() {
+
+        if (window.confirm("Are you sure you want to logout?")) {
+
+            localStorage.clear();
+
+            navigate("/admin/login");
+
+        }
+
+    }
 
     return (
 
@@ -36,11 +50,18 @@ function AdminSidebar() {
                 </Link>
 
                 <Link
-                    to="/"
-                    className="block p-3 rounded-xl hover:bg-red-600"
+                    to="/admin/students"
+                    className="block p-3 rounded-xl hover:bg-slate-700"
+                >
+                    Manage Students
+                </Link>
+
+                <button
+                    onClick={logout}
+                    className="w-full text-left p-3 rounded-xl hover:bg-red-600"
                 >
                     Logout
-                </Link>
+                </button>
 
             </nav>
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getProfile } from "../../services/profileService";
+import { getProfileCompletion } from "../../services/profileService";
 
 function ProfileCompletion() {
 
@@ -8,44 +8,27 @@ function ProfileCompletion() {
 
     const userId = Number(localStorage.getItem("userId"));
 
-    const [percentage, setPercentage] = useState(0);
+    const [completion, setCompletion] = useState(0);
 
     useEffect(() => {
 
-        loadProfile();
+        loadCompletion();
 
     }, []);
 
-    async function loadProfile() {
+    async function loadCompletion() {
 
         try {
 
-            const response = await getProfile(userId);
+            const response = await getProfileCompletion(userId);
 
-            const profile = response.data;
-
-            const fields = [
-
-                profile.fullName,
-                profile.phone,
-                profile.college,
-                profile.degree,
-                profile.graduationYear,
-                profile.skills,
-                profile.resumeUrl,
-                profile.bio
-
-            ];
-
-            const completed = fields.filter(field => field).length;
-
-            setPercentage(Math.round((completed / fields.length) * 100));
+            setCompletion(response.data.completion);
 
         }
 
         catch (error) {
 
-            setPercentage(0);
+            console.log(error);
 
         }
 
@@ -64,21 +47,23 @@ function ProfileCompletion() {
             <div className="w-full bg-gray-200 rounded-full h-4 mt-6">
 
                 <div
-                    className="bg-blue-600 h-4 rounded-full"
-                    style={{ width: `${percentage}%` }}
-                />
+                    className="bg-blue-600 h-4 rounded-full transition-all duration-500"
+                    style={{
+                        width: `${completion}%`
+                    }}
+                ></div>
 
             </div>
 
-            <p className="mt-4 text-gray-500">
+            <p className="mt-4 text-gray-600">
 
-                {percentage}% Completed
+                {completion}% Completed
 
             </p>
 
             <button
                 onClick={() => navigate("/profile")}
-                className="mt-6 bg-blue-600 text-white px-5 py-3 rounded-xl"
+                className="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl"
             >
 
                 Edit Profile

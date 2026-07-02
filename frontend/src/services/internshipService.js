@@ -11,3 +11,9 @@ export const getInternshipCount = () =>
 
 export const getInternshipById = (id) =>
     api.get(`/internships/${id}`);
+
+export const getRecommendedInternships = (userId) =>
+    api.get(`/internships/recommended/${userId}`);
+
+export const getInternshipMatch = (internshipId, userId) =>
+    api.get(`/internships/${internshipId}/match/${userId}`);

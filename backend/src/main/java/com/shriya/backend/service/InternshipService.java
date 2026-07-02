@@ -1,11 +1,22 @@
 package com.shriya.backend.service;
 
+import com.shriya.backend.dto.InternshipMatchResponse;
 import com.shriya.backend.dto.InternshipRequest;
 import com.shriya.backend.entity.Internship;
 import com.shriya.backend.enums.InternshipStatus;
 import com.shriya.backend.repository.InternshipRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import com.shriya.backend.dto.RecommendedInternshipResponse;
+import com.shriya.backend.entity.StudentProfile;
+import com.shriya.backend.repository.StudentProfileRepository;
+import com.shriya.backend.dto.InternshipMatchResponse;
+
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,6 +26,8 @@ import java.util.List;
 public class InternshipService {
 
     private final InternshipRepository internshipRepository;
+
+    private final StudentProfileRepository studentProfileRepository;
 
     public Internship createInternship(InternshipRequest request) {
 
@@ -88,5 +101,96 @@ public List<Internship> getLatestInternships() {
 
 public Long getInternshipCount() {
     return internshipRepository.count();
+}
+
+public List<RecommendedInternshipResponse> getRecommendedInternships(Long userId) {
+
+    StudentProfile student = studentProfileRepository.findByUserId(userId)
+            .orElseThrow(() -> new RuntimeException("Student profile not found"));
+
+    Set<String> studentSkills = Arrays.stream(student.getSkills().split(","))
+            .map(String::trim)
+            .map(String::toLowerCase)
+            .collect(Collectors.toSet());
+
+    return internshipRepository.findByStatus(InternshipStatus.OPEN)
+            .stream()
+            .map(internship -> {
+
+                Set<String> internshipSkills = Arrays.stream(internship.getSkillsRequired().split(","))
+                        .map(String::trim)
+                        .map(String::toLowerCase)
+                        .collect(Collectors.toSet());
+
+                Set<String> commonSkills = new HashSet<>(studentSkills);
+commonSkills.retainAll(internshipSkills);
+
+int match = studentSkills.isEmpty()
+        ? 0
+        : (commonSkills.size() * 100) / studentSkills.size();
+
+List<String> matchedSkills =
+        commonSkills.stream().toList();
+
+return RecommendedInternshipResponse.builder()
+        .id(internship.getId())
+        .title(internship.getTitle())
+        .companyName(internship.getCompanyName())
+        .location(internship.getLocation())
+        .stipend(internship.getStipend())
+        .matchPercentage(match)
+        .matchedSkills(matchedSkills)
+        .build();
+
+            })
+            .filter(internship -> internship.getMatchPercentage() >= 50)
+.sorted(
+        Comparator.comparing(
+                RecommendedInternshipResponse::getMatchPercentage
+        ).reversed()
+)
+.limit(5)
+.toList();
+
+}
+
+public InternshipMatchResponse getInternshipMatch(Long internshipId, Long userId) {
+
+    StudentProfile student = studentProfileRepository.findByUserId(userId)
+            .orElseThrow(() -> new RuntimeException("Student profile not found"));
+
+    Internship internship = internshipRepository.findById(internshipId)
+            .orElseThrow(() -> new RuntimeException("Internship not found"));
+
+    Set<String> studentSkills = Arrays.stream(student.getSkills().split(","))
+            .map(String::trim)
+            .filter(skill -> !skill.isBlank())
+            .collect(Collectors.toSet());
+
+    Set<String> internshipSkills = Arrays.stream(internship.getSkillsRequired().split(","))
+            .map(String::trim)
+            .filter(skill -> !skill.isBlank())
+            .collect(Collectors.toSet());
+
+    List<String> matchedSkills = internshipSkills.stream()
+            .filter(studentSkills::contains)
+            .toList();
+
+    List<String> missingSkills = internshipSkills.stream()
+            .filter(skill -> !studentSkills.contains(skill))
+            .toList();
+
+    int percentage = internshipSkills.isEmpty()
+            ? 0
+            : (matchedSkills.size() * 100) / internshipSkills.size();
+
+    return InternshipMatchResponse.builder()
+        .matchPercentage(percentage)
+        .matchedSkillCount(matchedSkills.size())
+        .totalRequiredSkills(internshipSkills.size())
+        .matchedSkills(matchedSkills)
+        .missingSkills(missingSkills)
+        .build();
+
 }
 }

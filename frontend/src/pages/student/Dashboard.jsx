@@ -16,6 +16,8 @@ import Notifications from "../../components/dashboard/Notifications";
 
 import NotificationBell from "../../components/dashboard/NotificationBell";
 
+import RecommendedInternships from "../../components/dashboard/RecommendedInternships";
+
 
 
 function Dashboard() {
@@ -35,6 +37,8 @@ function Dashboard() {
                 <ProfileCompletion />
 
             </div>
+
+            <RecommendedInternships />
 
             <RecentApplications />
 

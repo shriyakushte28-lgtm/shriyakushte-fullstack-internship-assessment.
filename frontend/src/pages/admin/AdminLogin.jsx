@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../../services/api";
 
-function Login() {
+function AdminLogin() {
 
     const navigate = useNavigate();
 
@@ -31,35 +31,20 @@ function Login() {
                 formData
             );
 
-            localStorage.setItem(
-                "token",
-                response.data.token
-            );
+            if (response.data.role !== "ADMIN") {
 
-            localStorage.setItem(
-                "userId",
-                response.data.id
-            );
+                alert("Access denied. This portal is only for administrators.");
 
-            localStorage.setItem(
-                "fullName",
-                response.data.fullName
-            );
+                return;
 
-            localStorage.setItem(
-                "role",
-                response.data.role
-            );
+            }
 
-            if (response.data.role !== "STUDENT") {
+            localStorage.setItem("token", response.data.token);
+            localStorage.setItem("userId", response.data.id);
+            localStorage.setItem("fullName", response.data.fullName);
+            localStorage.setItem("role", response.data.role);
 
-    alert("Please use the Admin Login page.");
-
-    return;
-
-}
-
-navigate("/dashboard");
+            navigate("/admin/dashboard");
 
         }
 
@@ -67,7 +52,7 @@ navigate("/dashboard");
 
             console.log(error);
 
-            alert("Invalid Email or Password");
+            alert("Invalid Admin Credentials");
 
         }
 
@@ -79,11 +64,17 @@ navigate("/dashboard");
 
             <div className="bg-white rounded-2xl shadow p-10 w-[420px]">
 
-                <h1 className="text-3xl font-bold mb-6">
+                <h1 className="text-3xl font-bold mb-2">
 
-                    Login
+                    Admin Login
 
                 </h1>
+
+                <p className="text-gray-500 mb-6">
+
+                    Sign in to manage the Internship Portal
+
+                </p>
 
                 <form
                     onSubmit={handleSubmit}
@@ -92,7 +83,7 @@ navigate("/dashboard");
 
                     <input
                         name="email"
-                        placeholder="Email"
+                        placeholder="Admin Email"
                         className="border p-3 rounded-lg w-full"
                         onChange={handleChange}
                     />
@@ -106,7 +97,7 @@ navigate("/dashboard");
                     />
 
                     <button
-                        className="bg-blue-600 text-white w-full p-3 rounded-lg"
+                        className="bg-slate-800 hover:bg-slate-900 text-white w-full p-3 rounded-lg"
                     >
 
                         Login
@@ -117,27 +108,14 @@ navigate("/dashboard");
 
                 <p className="mt-6 text-center">
 
-                    Don't have an account?
-
                     <Link
-                        to="/register"
-                        className="text-blue-600 ml-2"
+                        to="/login"
+                        className="text-blue-600"
                     >
-                        Register
+                        ← Back to Student Login
                     </Link>
 
                 </p>
-
-                <div className="mt-8 border-t pt-4 text-center">
-
-    <Link
-        to="/admin/login"
-        className="text-sm text-gray-500 hover:text-blue-600"
-    >
-        Admin Login
-    </Link>
-
-</div>
 
             </div>
 
@@ -147,4 +125,4 @@ navigate("/dashboard");
 
 }
 
-export default Login;
+export default AdminLogin;

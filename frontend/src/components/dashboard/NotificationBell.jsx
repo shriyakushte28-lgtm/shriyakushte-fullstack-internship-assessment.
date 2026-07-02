@@ -108,6 +108,21 @@ function getRelativeTime(date) {
 
 }
 
+function getIcon(notification) {
+
+    if (notification.title.includes("Accepted"))
+        return "🎉";
+
+    if (notification.title.includes("Shortlisted"))
+        return "💼";
+
+    if (notification.title.includes("Rejected"))
+        return "❌";
+
+    return "🔔";
+
+}
+
     return (
 
         <div 
@@ -160,6 +175,8 @@ function getRelativeTime(date) {
                         right-0
                         mt-3
                         w-96
+                        max-h-[500px]
+                        overflow-y-auto
                         bg-white
                         rounded-xl
                         shadow-xl
@@ -183,11 +200,17 @@ function getRelativeTime(date) {
 
                                 (
 
-                                    <p className="p-4">
+                                    <div className="p-8 text-center text-gray-500">
 
-                                        No notifications
+                                        <div className="text-5xl mb-3">
 
-                                    </p>
+                                            🔔
+
+                                        </div>
+
+                                        <p>No notifications yet.</p>
+
+                                    </div>
 
                                 )
 
@@ -205,7 +228,9 @@ function getRelativeTime(date) {
                                         }`}
                                     >
 
-                                        <h3 className="font-semibold">
+                                        <h3 className="font-semibold flex items-center gap-2">
+
+                                            <span>{getIcon(notification)}</span>
 
                                             {notification.title}
 

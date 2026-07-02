@@ -5,6 +5,9 @@ import com.shriya.backend.dto.ApplicationSummaryResponse;
 import com.shriya.backend.entity.Application;
 import com.shriya.backend.enums.ApplicationStatus;
 import com.shriya.backend.service.ApplicationService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.server.ResponseStatusException;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,9 +16,19 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/applications")
 @RequiredArgsConstructor
+
 public class ApplicationController {
 
     private final ApplicationService applicationService;
+
+    @ExceptionHandler(ResponseStatusException.class)
+public ResponseEntity<String> handleResponseStatusException(ResponseStatusException ex) {
+
+    return ResponseEntity
+            .status(ex.getStatusCode())
+            .body(ex.getReason());
+
+}
 
     @PostMapping
     public Application apply(@RequestBody ApplicationRequest request) {
@@ -24,10 +37,10 @@ public class ApplicationController {
 
     }
 
-    @GetMapping("/student/{studentId}")
-    public List<Application> getStudentApplications(@PathVariable Long studentId) {
+    @GetMapping("/user/{userId}")
+    public List<Application> getUserApplications(@PathVariable Long userId) {
 
-        return applicationService.getStudentApplications(studentId);
+        return applicationService.getUserApplications(userId);
 
     }
 
@@ -57,12 +70,12 @@ public Application updateStatus(
 
 }
 
-@GetMapping("/student/{studentId}/summary")
+@GetMapping("/user/{userId}/summary")
 public ApplicationSummaryResponse getSummary(
-        @PathVariable Long studentId
+        @PathVariable Long userId
 ) {
 
-    return applicationService.getSummary(studentId);
+    return applicationService.getSummary(userId);
 
 }
 

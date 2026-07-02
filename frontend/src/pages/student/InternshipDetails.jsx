@@ -1,9 +1,19 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+
 import DashboardLayout from "../../layouts/DashboardLayout";
-import { getInternshipById } from "../../services/internshipService";
+
+import {
+    getInternshipById,
+    getInternshipMatch
+} from "../../services/internshipService";
+
+import {
+    saveInternship,
+    checkSavedInternship
+} from "../../services/savedService";
+
 import { applyInternship } from "../../services/applicationService";
-import { useNavigate } from "react-router-dom";
 
 function InternshipDetails() {
 
@@ -11,11 +21,23 @@ function InternshipDetails() {
 
     const { id } = useParams();
 
+    const userId = Number(localStorage.getItem("userId"));
+
     const [internship, setInternship] = useState(null);
+
+    const [match, setMatch] = useState(null);
+
+    const [saved, setSaved] = useState(false);
+
+    const [saving, setSaving] = useState(false);
 
     useEffect(() => {
 
         loadInternship();
+
+        loadMatch();
+
+        checkSaved();
 
     }, [id]);
 
@@ -27,45 +49,137 @@ function InternshipDetails() {
 
             setInternship(response.data);
 
-        } catch (error) {
+        }
+
+        catch (error) {
 
             console.log(error);
 
         }
+
+    }
+
+    async function loadMatch() {
+
+        try {
+
+            const response = await getInternshipMatch(id, userId);
+
+            setMatch(response.data);
+
+        }
+
+        catch (error) {
+
+            console.log(error);
+
+        }
+
     }
 
     async function handleApply() {
 
+        try {
+
+            await applyInternship({
+
+                userId: userId,
+
+                internshipId: internship.id,
+
+                coverLetter: "",
+
+                resumeUrl: "resume.pdf"
+
+            });
+
+            alert("Application Submitted Successfully!");
+
+            navigate("/applications");
+
+        }
+
+        catch (error) {
+
+            if (error.response?.status === 409) {
+
+                alert("You have already applied for this internship.");
+
+            }
+
+            else {
+
+                alert("Something went wrong. Please try again.");
+
+                console.log(error);
+
+            }
+
+        }
+
+    }
+
+    async function checkSaved() {
+
     try {
 
-        await applyInternship({
+        const response = await checkSavedInternship(userId, id);
 
-            studentId: Number(localStorage.getItem("userId")),
-            internshipId: internship.id,
-            coverLetter: "",
-            resumeUrl: "resume.pdf"
+        setSaved(response.data);
 
-        });
+    }
 
-        alert("Application Submitted Successfully!");
-
-        navigate("/applications");
-
-    } catch (error) {
-
-    if (error.response?.status === 409) {
-
-        alert("You have already applied for this internship.");
-
-    } else {
-
-        alert("Something went wrong. Please try again.");
+    catch (error) {
 
         console.log(error);
 
     }
 
 }
+
+async function handleSave() {
+
+    try {
+
+        setSaving(true);
+
+        await saveInternship({
+
+            userId,
+
+            internshipId: internship.id
+
+        });
+
+        setSaved(true);
+
+        alert("Internship saved successfully!");
+
+    }
+
+    catch (error) {
+
+        if (error.response?.status === 409) {
+
+            alert("Internship already saved.");
+
+            setSaved(true);
+
+        }
+
+        else {
+
+            console.log(error);
+
+        }
+
+    }
+
+    finally {
+
+        setSaving(false);
+
+    }
 
 }
 
@@ -75,7 +189,11 @@ function InternshipDetails() {
 
             <DashboardLayout>
 
-                <h2 className="text-2xl">Loading...</h2>
+                <h2 className="text-2xl">
+
+                    Loading...
+
+                </h2>
 
             </DashboardLayout>
 
@@ -93,30 +211,235 @@ function InternshipDetails() {
 
             </h1>
 
-            <div className="bg-white rounded-2xl shadow p-8 mt-8 space-y-4">
+            <div className="bg-white rounded-2xl shadow p-8 mt-8">
 
-                <p><strong>Company:</strong> {internship.companyName}</p>
+                <p className="mb-3">
 
-                <p><strong>Location:</strong> {internship.location}</p>
+                    <strong>Company:</strong> {internship.companyName}
 
-                <p><strong>Stipend:</strong> ₹ {internship.stipend}</p>
+                </p>
 
-                <p><strong>Duration:</strong> {internship.durationMonths} Months</p>
+                <p className="mb-3">
 
-                <p><strong>Deadline:</strong> {internship.deadline}</p>
+                    <strong>Location:</strong> {internship.location}
 
-                <p><strong>Skills:</strong> {internship.skillsRequired}</p>
+                </p>
 
-                <p><strong>Description:</strong></p>
+                <p className="mb-3">
 
-                <p>{internship.description}</p>
+                    <strong>Stipend:</strong> ₹ {internship.stipend}
 
-                <button
-                    onClick={handleApply}
-                    className="bg-blue-600 text-white px-8 py-3 rounded-xl mt-6 hover:bg-blue-700"
-                >
-                    Apply Now
-                </button>
+                </p>
+
+                <p className="mb-3">
+
+                    <strong>Duration:</strong> {internship.durationMonths} Months
+
+                </p>
+
+                <p className="mb-3">
+
+                    <strong>Deadline:</strong> {internship.deadline}
+
+                </p>
+
+                <p className="mb-5">
+
+                    <strong>Required Skills:</strong>
+
+                    <br />
+
+                    {internship.skillsRequired}
+
+                </p>
+
+                <p className="font-semibold text-lg">
+
+                    Description
+
+                </p>
+
+                <p className="mt-2 mb-8">
+
+                    {internship.description}
+
+                </p>
+
+                {
+
+                    match && (
+
+                        <div className="border rounded-2xl p-6 bg-slate-50 mb-8">
+
+                            <h2 className="text-2xl font-bold mb-5">
+
+                                🎯 Your Compatibility
+
+                            </h2>
+
+                            <div className="w-full bg-gray-200 rounded-full h-5">
+
+                                <div
+
+                                    className="bg-green-600 h-5 rounded-full transition-all"
+
+                                    style={{
+
+                                        width: `${match.matchPercentage}%`
+
+                                    }}
+
+                                >
+
+                                </div>
+
+                            </div>
+
+                            <p className="text-xl font-bold mt-4">
+
+                                {match.matchPercentage}% Match
+
+                            </p>
+
+                            <p className="text-gray-600 mb-6">
+
+                                {match.matchedSkillCount} of {match.totalRequiredSkills} required skills matched.
+
+                            </p>
+
+                            <div className="grid md:grid-cols-2 gap-8">
+
+                                <div>
+
+                                    <h3 className="font-bold text-green-700 mb-3">
+
+                                        ✅ Skills You Already Have
+
+                                    </h3>
+
+                                    {
+
+                                        match.matchedSkills.length === 0 ?
+
+                                            (
+
+                                                <p>
+
+                                                    No matching skills.
+
+                                                </p>
+
+                                            )
+
+                                            :
+
+                                            match.matchedSkills.map(skill => (
+
+                                                <p
+                                                    key={skill}
+                                                    className="mb-2"
+                                                >
+
+                                                    ✔ {skill}
+
+                                                </p>
+
+                                            ))
+
+                                    }
+
+                                </div>
+
+                                <div>
+
+                                    <h3 className="font-bold text-orange-600 mb-3">
+
+                                        📚 Skills You Can Learn
+
+                                    </h3>
+
+                                    {
+
+                                        match.missingSkills.length === 0 ?
+
+                                            (
+
+                                                <p>
+
+                                                    Excellent! You already have every required skill.
+
+                                                </p>
+
+                                            )
+
+                                            :
+
+                                            match.missingSkills.map(skill => (
+
+                                                <p
+                                                    key={skill}
+                                                    className="mb-2"
+                                                >
+
+                                                    • {skill}
+
+                                                </p>
+
+                                            ))
+
+                                    }
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    )
+
+                }
+
+                <div className="flex gap-4 mt-8">
+
+    <button
+
+        onClick={handleApply}
+
+        className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl"
+
+    >
+
+        Apply Now
+
+    </button>
+
+    <button
+
+        disabled={saved || saving}
+
+        onClick={handleSave}
+
+        className={`px-8 py-3 rounded-xl text-white ${
+            saved
+                ? "bg-green-600"
+                : "bg-pink-600 hover:bg-pink-700"
+        }`}
+
+    >
+
+        {
+
+            saved
+
+                ? "❤️ Saved"
+
+                : "🤍 Save Internship"
+
+        }
+
+    </button>
+
+</div>
 
             </div>
 

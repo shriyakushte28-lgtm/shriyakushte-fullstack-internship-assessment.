@@ -7,6 +7,8 @@ import com.shriya.backend.repository.StudentProfileRepository;
 import com.shriya.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import com.shriya.backend.dto.StudentSummaryResponse;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -65,6 +67,64 @@ public String updateProfile(Long userId, StudentProfileRequest request) {
     profileRepository.save(profile);
 
     return "Profile updated successfully";
+
+}
+
+public int getProfileCompletion(Long userId) {
+
+    StudentProfile profile = profileRepository.findByUserId(userId)
+            .orElseThrow(() -> new RuntimeException("Profile not found"));
+
+    int completed = 0;
+
+    if (profile.getFullName() != null && !profile.getFullName().isBlank())
+        completed++;
+
+    if (profile.getPhone() != null && !profile.getPhone().isBlank())
+        completed++;
+
+    if (profile.getCollege() != null && !profile.getCollege().isBlank())
+        completed++;
+
+    if (profile.getDegree() != null && !profile.getDegree().isBlank())
+        completed++;
+
+    if (profile.getGraduationYear() != null)
+        completed++;
+
+    if (profile.getSkills() != null && !profile.getSkills().isBlank())
+        completed++;
+
+    if (profile.getResumeUrl() != null && !profile.getResumeUrl().isBlank())
+        completed++;
+
+    if (profile.getBio() != null && !profile.getBio().isBlank())
+        completed++;
+
+    return (completed * 100) / 8;
+
+}
+
+public List<StudentSummaryResponse> getAllStudents() {
+
+    return profileRepository.findAll()
+            .stream()
+            .map(profile -> StudentSummaryResponse.builder()
+                    .id(profile.getId())
+                    .userId(profile.getUser().getId())
+                    .fullName(profile.getFullName())
+                    .email(profile.getUser().getEmail())
+                    .college(profile.getCollege())
+                    .degree(profile.getDegree())
+                    .build())
+            .toList();
+
+}
+
+public StudentProfile getStudentById(Long id) {
+
+    return profileRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Student not found"));
 
 }
 }
