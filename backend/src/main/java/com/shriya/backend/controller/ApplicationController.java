@@ -79,4 +79,27 @@ public ApplicationSummaryResponse getSummary(
 
 }
 
+@GetMapping("/filter")
+public List<Application> filterApplications(
+
+        @RequestParam(required = false) String student,
+
+        @RequestParam(required = false) String internship,
+
+        @RequestParam(required = false) ApplicationStatus status
+
+) {
+
+    return applicationService.filterApplications(
+
+            student,
+
+            internship,
+
+            status
+
+    );
+
+}
+
 }

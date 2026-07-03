@@ -1,55 +1,54 @@
 import { Link } from "react-router-dom";
 
 function Navbar() {
-  return (
-    <nav className="w-full bg-white shadow-sm sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-8 py-4 flex items-center justify-between">
+    return (
+        <nav className="w-full bg-white border-b border-slate-200 sticky top-0 z-50">
+            <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+                {/* Brand Logo */}
+                <Link to="/" className="flex items-center gap-2">
+                    <div className="h-7 w-7 rounded bg-blue-600 flex items-center justify-center text-white font-bold text-sm shadow-sm">
+                        I
+                    </div>
+                    <span className="text-sm font-bold tracking-tight text-slate-900">
+                        InternSphere
+                    </span>
+                </Link>
 
-        <h2 className="text-2xl font-bold text-blue-600">
-          InternSphere
-        </h2>
+                {/* Nav Links */}
+                <ul className="hidden md:flex items-center gap-6 text-xs font-semibold text-slate-500">
+                    <li>
+                        <Link to="/" className="hover:text-slate-900 transition-colors">Home</Link>
+                    </li>
+                    <li>
+                        <Link to="/" className="hover:text-slate-900 transition-colors">Browse Internships</Link>
+                    </li>
+                    <li>
+                        <Link to="/" className="hover:text-slate-900 transition-colors">About Portal</Link>
+                    </li>
+                    <li>
+                        <Link to="/" className="hover:text-slate-900 transition-colors">Contact Support</Link>
+                    </li>
+                </ul>
 
-        <ul className="flex gap-8 text-gray-700 font-medium">
+                {/* Actions */}
+                <div className="flex items-center gap-2">
+                    <Link
+                        to="/login"
+                        className="btn-secondary py-1.5 px-3 text-xs"
+                    >
+                        Sign in
+                    </Link>
 
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-
-          <li>
-            <Link to="/">Internships</Link>
-          </li>
-
-          <li>
-            <Link to="/">About</Link>
-          </li>
-
-          <li>
-            <Link to="/">Contact</Link>
-          </li>
-
-        </ul>
-
-        <div className="flex gap-3">
-
-          <Link
-            to="/login"
-            className="px-5 py-2 border rounded-lg hover:bg-gray-100 transition"
-          >
-            Login
-          </Link>
-
-          <Link
-            to="/register"
-            className="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-          >
-            Register
-          </Link>
-
-        </div>
-
-      </div>
-    </nav>
-  );
+                    <Link
+                        to="/register"
+                        className="btn-primary py-1.5 px-3 text-xs"
+                    >
+                        Create Account
+                    </Link>
+                </div>
+            </div>
+        </nav>
+    );
 }
 
 export default Navbar;

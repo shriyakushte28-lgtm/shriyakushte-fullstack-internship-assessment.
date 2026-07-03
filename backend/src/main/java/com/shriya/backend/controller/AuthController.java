@@ -17,7 +17,6 @@ public class AuthController {
 
     @PostMapping("/register")
     public String register(@Valid @RequestBody RegisterRequest request) {
-        System.out.println("===== REGISTER API CALLED =====");
         return authService.register(request);
     }
 

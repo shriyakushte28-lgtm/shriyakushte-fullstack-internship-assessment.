@@ -1,186 +1,180 @@
 import { useEffect, useState } from "react";
-
 import AdminLayout from "../../layouts/AdminLayout";
 import InternshipTable from "../../components/admin/InternshipTable";
 import InternshipForm from "../../components/admin/InternshipForm";
-
-import {
-    getAllInternships,
-    createInternship,
-    updateInternship,
-    deleteInternship
-} from "../../services/adminInternshipService";
+import InternshipFilters from "../../components/filters/InternshipFilters";
+import { getAllInternships, createInternship, updateInternship, deleteInternship, filterInternships } from "../../services/adminInternshipService";
+import { PlusCircle, Briefcase } from "lucide-react";
+import toast from "react-hot-toast";
+import ConfirmModal from "../../components/common/ConfirmModal";
+import SkeletonTable from "../../components/skeletons/SkeletonTable";
 
 function ManageInternships() {
-
     const [internships, setInternships] = useState([]);
-
     const [showForm, setShowForm] = useState(false);
-
     const [selectedInternship, setSelectedInternship] = useState(null);
-
-    const [search, setSearch] = useState("");
-
-    const filteredInternships = internships.filter((internship) =>
-        internship.title.toLowerCase().includes(search.toLowerCase()) ||
-        internship.companyName.toLowerCase().includes(search.toLowerCase())
-    );
+    const [loading, setLoading] = useState(true);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [internshipToDelete, setInternshipToDelete] = useState(null);
 
     useEffect(() => {
-
         loadInternships();
-
     }, []);
 
     async function loadInternships() {
-
         try {
-
+            setLoading(true);
             const response = await getAllInternships();
-
             setInternships(response.data);
-
         } catch (error) {
-
-            console.log(error);
-
+            console.error("Failed to load admin internships", error);
+        } finally {
+            setLoading(false);
         }
+    }
 
+    async function searchInternships(filters) {
+        try {
+            setLoading(true);
+            if (Object.keys(filters).length === 0) {
+                await loadInternships();
+                return;
+            }
+            const response = await filterInternships(filters);
+            setInternships(response.data);
+        } catch (error) {
+            console.error("Failed to filter internships", error);
+        } finally {
+            setLoading(false);
+        }
     }
 
     function addInternship() {
-
         setSelectedInternship(null);
-
         setShowForm(true);
-
     }
 
     function editInternship(internship) {
-
         setSelectedInternship(internship);
-
         setShowForm(true);
-
     }
 
     async function saveInternship(data) {
-
         try {
-
             if (selectedInternship) {
-
                 await updateInternship(selectedInternship.id, data);
-
+                toast.success("Internship updated successfully!");
             } else {
-
                 await createInternship(data);
-
+                toast.success("Internship created successfully!");
             }
-
             setShowForm(false);
-
             setSelectedInternship(null);
-
             loadInternships();
-
         } catch (error) {
-
-            console.log(error);
-
+            console.error("Failed to save internship data", error);
+            toast.error("Failed to save internship.");
         }
+    }
+
+    function removeInternship(id) {
+    setInternshipToDelete(id);
+    setShowDeleteModal(true);
+}
+
+async function confirmDeleteInternship() {
+
+    try {
+
+        await deleteInternship(internshipToDelete);
+
+        toast.success("Internship deleted successfully.");
+
+        loadInternships();
+
+    } catch (error) {
+
+        console.error(error);
+
+        toast.error("Unable to delete internship.");
+
+    } finally {
+
+        setShowDeleteModal(false);
+
+        setInternshipToDelete(null);
 
     }
 
-    async function removeInternship(id) {
-
-        if (!window.confirm("Are you sure you want to delete this internship?")) {
-
-            return;
-
-        }
-
-        try {
-
-            await deleteInternship(id);
-
-            loadInternships();
-
-        } catch (error) {
-
-            console.log(error);
-
-        }
-
-    }
+}
 
     return (
-
         <AdminLayout>
+            <div className="space-y-4">
+                {/* Header Title Row */}
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <div>
+                        <h1 className="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
+                            <Briefcase size={18} className="text-slate-700" />
+                            <span>Manage Internships</span>
+                        </h1>
+                        <p className="text-xs text-slate-500 mt-0.5">
+                            Create, update, or archive active internship opportunities
+                        </p>
+                    </div>
+                    {!showForm && (
+                        <button
+                            onClick={addInternship}
+                            className="btn-primary py-1.5 px-3 text-xs w-fit inline-flex items-center gap-1.5"
+                        >
+                            <PlusCircle size={13} />
+                            <span>Create Posting</span>
+                        </button>
+                    )}
+                </div>
 
-            <div className="flex justify-between items-center mb-8">
+                {/* Form Overlay */}
+                {showForm && (
+                    <InternshipForm
+                        internship={selectedInternship}
+                        onSave={saveInternship}
+                        onCancel={() => {
+                            setShowForm(false);
+                            setSelectedInternship(null);
+                        }}
+                    />
+                )}
 
-                <h1 className="text-4xl font-bold">
+                {/* Filters */}
+                <InternshipFilters onSearch={searchInternships} />
 
-                    Manage Internships
-
-                </h1>
-
-                <button
-                    onClick={addInternship}
-                    className="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700"
-                >
-
-                    + Add Internship
-
-                </button>
-
+                {/* Database Table */}
+                {loading ? (
+    <SkeletonTable />
+) : (
+    <InternshipTable
+        internships={internships}
+        onEdit={editInternship}
+        onDelete={removeInternship}
+    />
+)}
             </div>
 
-            {
-
-                showForm &&
-
-                <InternshipForm
-
-                    internship={selectedInternship}
-
-                    onSave={saveInternship}
-
-                    onCancel={() => {
-
-                        setShowForm(false);
-
-                        setSelectedInternship(null);
-
-                    }}
-
-                />
-
-            }
-
-            <input
-                type="text"
-                placeholder="Search internships..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="border rounded-lg px-4 py-2 mb-6 w-80"
-            />
-
-            <InternshipTable
-
-                internships={filteredInternships}
-
-                onEdit={editInternship}
-
-                onDelete={removeInternship}
-
-            />
-
+            <ConfirmModal
+    open={showDeleteModal}
+    title="Delete Internship"
+    message="Are you sure you want to permanently delete this internship? This action cannot be undone."
+    confirmText="Delete"
+    cancelText="Cancel"
+    danger={true}
+    onConfirm={confirmDeleteInternship}
+    onCancel={() => {
+        setShowDeleteModal(false);
+        setInternshipToDelete(null);
+    }}
+/>
         </AdminLayout>
-
     );
-
 }
 
 export default ManageInternships;

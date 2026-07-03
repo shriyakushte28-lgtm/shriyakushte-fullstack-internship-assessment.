@@ -8,3 +8,6 @@ export const getStudentApplications = (userId) =>
 
 export const getSummary = (userId) =>
     api.get(`/applications/user/${userId}/summary`);
+
+export const getAllApplications = () =>
+    api.get("/applications");

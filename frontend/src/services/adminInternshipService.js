@@ -11,3 +11,10 @@ export const updateInternship = (id, data) =>
 
 export const deleteInternship = (id) =>
     api.delete(`/internships/${id}`);
+
+export const filterInternships = (filters) =>
+    api.get("/internships/filter", {
+
+        params: filters
+
+    });

@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 
 import "./index.css";
 
@@ -23,10 +24,47 @@ import Settings from "./pages/student/Settings";
 import ManageStudents from "./pages/admin/ManageStudents";
 import StudentDetails from "./pages/admin/StudentDetails";
 import MySavedInternships from "./pages/student/MySavedInternships";
+import AdminProfile from "./pages/admin/AdminProfile";
+import AdminSettings from "./pages/admin/AdminSettings";
+import NotFound from "./pages/public/NotFound";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
+
+    <Toaster
+    position="top-right"
+    reverseOrder={false}
+    gutter={10}
+    toastOptions={{
+        duration: 3000,
+        style: {
+            background: "#ffffff",
+            color: "#0f172a",
+            border: "1px solid #e2e8f0",
+            borderRadius: "12px",
+            padding: "14px 16px",
+            fontSize: "14px",
+            fontWeight: "500",
+            boxShadow: "0 8px 30px rgba(0,0,0,0.08)"
+        },
+
+        success: {
+            iconTheme: {
+                primary: "#16a34a",
+                secondary: "#ffffff",
+            },
+        },
+
+        error: {
+            iconTheme: {
+                primary: "#dc2626",
+                secondary: "#ffffff",
+            },
+        },
+    }}
+/>
+
       <Routes>
 
         <Route path="/" element={<Home />} />
@@ -122,6 +160,41 @@ createRoot(document.getElementById("root")).render(
         </ProtectedRoute>
     }
 />
+
+<Route
+    path="/admin/students"
+    element={
+        <ProtectedRoute>
+            <AdminRoute>
+                <ManageStudents />
+            </AdminRoute>
+        </ProtectedRoute>
+    }
+/>
+
+<Route
+    path="/admin/profile"
+    element={
+        <ProtectedRoute>
+            <AdminRoute>
+                <AdminProfile />
+            </AdminRoute>
+        </ProtectedRoute>
+    }
+/>
+
+<Route
+    path="/admin/settings"
+    element={
+        <ProtectedRoute>
+            <AdminRoute>
+                <AdminSettings />
+            </AdminRoute>
+        </ProtectedRoute>
+    }
+/>
+
+<Route path="*" element={<NotFound />} />
 
       </Routes>
     </BrowserRouter>

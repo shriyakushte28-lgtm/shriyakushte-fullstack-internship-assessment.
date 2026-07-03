@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Bell } from "lucide-react";
 import {
     getNotifications,
     getUnreadCount,
@@ -12,35 +13,35 @@ function NotificationBell() {
     const [notifications, setNotifications] = useState([]);
     const [count, setCount] = useState(0);
     const [open, setOpen] = useState(false);
+
     const dropdownRef = useRef(null);
 
     useEffect(() => {
 
-            function handleClickOutside(event) {
+        loadNotifications();
 
-        if (
-            dropdownRef.current &&
-            !dropdownRef.current.contains(event.target)
-        ) {
+    }, []);
 
-            setOpen(false);
+    useEffect(() => {
+
+        function handleClickOutside(event) {
+
+            if (
+                dropdownRef.current &&
+                !dropdownRef.current.contains(event.target)
+            ) {
+                setOpen(false);
+            }
 
         }
 
-    }
+        document.addEventListener("mousedown", handleClickOutside);
 
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-
-        document.removeEventListener(
-            "mousedown",
-            handleClickOutside
-        );
-
-    };
-
-        loadNotifications();
+        return () =>
+            document.removeEventListener(
+                "mousedown",
+                handleClickOutside
+            );
 
     }, []);
 
@@ -68,99 +69,52 @@ function NotificationBell() {
 
     }
 
-    async function handleNotificationClick(id) {
+    async function handleNotification(notification) {
 
-    try {
+        if (!notification.isRead) {
 
-        await markAsRead(id);
+            await markAsRead(notification.id);
 
-        loadNotifications();
+            loadNotifications();
 
-    }
-
-    catch (error) {
-
-        console.log(error);
+        }
 
     }
 
-}
+    function formatDate(date) {
 
-function getRelativeTime(date) {
+        return new Date(date).toLocaleDateString();
 
-    const now = new Date();
-
-    const notificationDate = new Date(date);
-
-    const seconds =
-        Math.floor((now - notificationDate) / 1000);
-
-    if (seconds < 60)
-        return "Just now";
-
-    if (seconds < 3600)
-        return Math.floor(seconds / 60) + " min ago";
-
-    if (seconds < 86400)
-        return Math.floor(seconds / 3600) + " hrs ago";
-
-    return Math.floor(seconds / 86400) + " days ago";
-
-}
-
-function getIcon(notification) {
-
-    if (notification.title.includes("Accepted"))
-        return "🎉";
-
-    if (notification.title.includes("Shortlisted"))
-        return "💼";
-
-    if (notification.title.includes("Rejected"))
-        return "❌";
-
-    return "🔔";
-
-}
+    }
 
     return (
 
-        <div 
-            ref={dropdownRef}
+        <div
             className="relative"
+            ref={dropdownRef}
         >
 
             <button
+
                 onClick={() => setOpen(!open)}
-                className="relative text-3xl"
+
+                className="relative p-2 rounded-lg hover:bg-slate-100 transition"
+
             >
 
-                🔔
+                <Bell size={18} />
 
                 {
 
-                    count > 0 && (
+                    count > 0 &&
 
-                        <span
-                            className="absolute
-                            -top-2
-                            -right-2
-                            bg-red-600
-                            text-white
-                            rounded-full
-                            w-6
-                            h-6
-                            flex
-                            items-center
-                            justify-center
-                            text-xs"
-                        >
+                    <span
+                        className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] px-1.5 rounded-full"
+                    >
 
-                            {count}
+                        {count}
 
-                        </span>
-
-                    )
+                    </span>
 
                 }
 
@@ -168,83 +122,69 @@ function getIcon(notification) {
 
             {
 
-                open && (
+                open &&
 
-                    <div
-                        className="absolute
-                        right-0
-                        mt-3
-                        w-96
-                        max-h-[500px]
-                        overflow-y-auto
-                        bg-white
-                        rounded-xl
-                        shadow-xl
-                        border
-                        z-50"
-                    >
+                <div
+                    className="absolute right-0 mt-3 w-96 bg-white rounded-xl border border-slate-200 shadow-xl z-50"
+                >
 
-                        <div className="p-4 border-b">
+                    <div className="p-4 border-b">
 
-                            <h2 className="font-bold text-xl">
+                        <h2 className="font-bold text-lg">
 
-                                Notifications
+                            Notifications
 
-                            </h2>
+                        </h2>
 
-                        </div>
+                    </div>
+
+                    <div className="max-h-96 overflow-y-auto">
 
                         {
 
                             notifications.length === 0 ?
 
-                                (
+                                <div className="p-6 text-center text-slate-500">
 
-                                    <div className="p-8 text-center text-gray-500">
+                                    No notifications
 
-                                        <div className="text-5xl mb-3">
-
-                                            🔔
-
-                                        </div>
-
-                                        <p>No notifications yet.</p>
-
-                                    </div>
-
-                                )
+                                </div>
 
                                 :
 
                                 notifications.map(notification => (
 
                                     <div
+
                                         key={notification.id}
-                                        onClick={() => handleNotificationClick(notification.id)}
-                                        className={`p-4 border-b hover:bg-gray-50 cursor-pointer ${
-                                            !notification.read
-                                                ? "bg-blue-50"
-                                                : ""
-                                        }`}
+
+                                        onClick={() =>
+                                            handleNotification(notification)
+                                        }
+
+                                        className={`p-4 border-b cursor-pointer hover:bg-slate-50 transition
+                                        ${notification.isRead
+                                                ? "bg-white"
+                                                : "bg-blue-50"
+                                            }`}
+
                                     >
 
-                                        <h3 className="font-semibold flex items-center gap-2">
-
-                                            <span>{getIcon(notification)}</span>
+                                        <h3 className="font-semibold">
 
                                             {notification.title}
 
                                         </h3>
 
-                                        <p className="text-sm text-gray-600 mt-1">
+                                        <p className="text-sm text-slate-600 mt-1">
 
                                             {notification.message}
 
                                         </p>
 
-                                        <p className="text-xs text-gray-400 mt-2">
+                                        <p className="text-xs text-slate-400 mt-2">
 
-                                            {getRelativeTime(notification.createdAt)}
+                                            {formatDate(notification.createdAt)}
 
                                         </p>
 
@@ -256,7 +196,7 @@ function getIcon(notification) {
 
                     </div>
 
-                )
+                </div>
 
             }
 

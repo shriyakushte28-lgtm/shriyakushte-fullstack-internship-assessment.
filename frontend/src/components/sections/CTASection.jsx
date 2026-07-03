@@ -1,35 +1,34 @@
-function CTASection(){
+import { useNavigate } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 
-return(
+function CTASection() {
+    const navigate = useNavigate();
 
-<section className="py-24">
+    return (
+        <section className="py-16 bg-white">
+            <div className="max-w-5xl mx-auto px-6">
+                <div className="bg-slate-900 border border-slate-850 rounded-2xl p-10 md:p-14 text-center text-white relative overflow-hidden shadow-sm">
+                    {/* Glow element */}
+                    <div className="absolute inset-0 bg-blue-500/5 blur-3xl -z-10"></div>
 
-<div className="max-w-6xl mx-auto bg-blue-600 rounded-3xl p-16 text-center text-white">
+                    <h2 className="text-2xl md:text-3.5xl font-extrabold tracking-tight text-white leading-tight">
+                        Ready to Find Your Next Internship?
+                    </h2>
+                    <p className="mt-4 text-xs md:text-sm text-slate-400 max-w-lg mx-auto leading-relaxed">
+                        Join hundreds of students already matching their skill profiles with verified tech, design, and engineering postings.
+                    </p>
 
-<h2 className="text-5xl font-bold">
-
-Ready to Launch Your Career?
-
-</h2>
-
-<p className="mt-6 text-blue-100 text-lg">
-
-Join thousands of students discovering internship opportunities.
-
-</p>
-
-<button className="bg-white text-blue-600 px-8 py-4 rounded-xl mt-10 font-semibold hover:scale-105 transition">
-
-Get Started Today
-
-</button>
-
-</div>
-
-</section>
-
-)
-
+                    <button
+                        onClick={() => navigate("/register")}
+                        className="btn-primary mt-8 px-6 py-2.5 text-xs shadow-md inline-flex items-center gap-1.5"
+                    >
+                        <span>Create Student Account</span>
+                        <ArrowRight size={14} />
+                    </button>
+                </div>
+            </div>
+        </section>
+    );
 }
 
 export default CTASection;

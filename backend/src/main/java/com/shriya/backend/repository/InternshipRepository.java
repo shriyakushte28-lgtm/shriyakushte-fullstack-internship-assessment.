@@ -19,4 +19,7 @@ public interface InternshipRepository extends JpaRepository<Internship, Long> {
     List<Internship> findTop6ByOrderByCreatedAtDesc();
 
     long countByStatus(InternshipStatus status);
+
+    List<Internship> findTop5ByOrderByCreatedAtDesc();
+
 }

@@ -19,7 +19,6 @@ public class InternshipController {
 
     @PostMapping
     public Internship createInternship(@RequestBody InternshipRequest request) {
-        System.out.println("===== CREATE INTERNSHIP CALLED =====");
         return internshipService.createInternship(request);
     }
 

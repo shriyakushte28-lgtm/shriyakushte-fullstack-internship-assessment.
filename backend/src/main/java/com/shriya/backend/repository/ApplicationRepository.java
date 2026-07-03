@@ -19,4 +19,6 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
 
     long countByStudentIdAndStatus(Long studentId, ApplicationStatus status);
 
+    List<Application> findTop5ByOrderByAppliedAtDesc();
+
 }

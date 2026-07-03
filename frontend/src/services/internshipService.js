@@ -17,3 +17,10 @@ export const getRecommendedInternships = (userId) =>
 
 export const getInternshipMatch = (internshipId, userId) =>
     api.get(`/internships/${internshipId}/match/${userId}`);
+
+export const filterInternships = (filters) =>
+    api.get("/internships/filter", {
+
+        params: filters
+
+    });

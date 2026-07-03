@@ -30,9 +30,6 @@ public class ApplicationService {
 
     public Application apply(ApplicationRequest request) {
 
-        System.out.println("===== APPLY METHOD CALLED =====");
-        System.out.println(request);
-
         StudentProfile student = studentProfileRepository
         .findByUserId(request.getUserId())
         .orElseThrow(() -> new RuntimeException("Student not found"));
@@ -188,6 +185,64 @@ if (alreadyApplied) {
             )
 
     );
+
+}
+
+public List<Application> filterApplications(
+
+        String student,
+
+        String internship,
+
+        ApplicationStatus status
+
+) {
+
+    return applicationRepository.findAllByOrderByAppliedAtDesc()
+
+            .stream()
+
+            .filter(application ->
+
+                    student == null ||
+
+                    student.isBlank() ||
+
+                    application.getStudent()
+
+                            .getFullName()
+
+                            .toLowerCase()
+
+                            .contains(student.toLowerCase())
+
+            )
+
+            .filter(application ->
+
+                    internship == null ||
+
+                    internship.isBlank() ||
+
+                    application.getInternship()
+
+                            .getTitle()
+
+                            .toLowerCase()
+
+                            .contains(internship.toLowerCase())
+
+            )
+
+            .filter(application ->
+
+                    status == null ||
+
+                    application.getStatus() == status
+
+            )
+
+            .toList();
 
 }
 }

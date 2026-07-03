@@ -1,55 +1,40 @@
 import DashboardLayout from "../../layouts/DashboardLayout";
-
 import WelcomeBanner from "../../components/dashboard/WelcomeBanner";
-
 import SummaryCards from "../../components/dashboard/SummaryCards";
-
+import RecommendedInternships from "../../components/dashboard/RecommendedInternships";
+import LatestInternships from "../../components/dashboard/LatestInternships";
+import RecentApplications from "../../components/dashboard/RecentApplications";
+import ProfileCompletion from "../../components/dashboard/ProfileCompletion";
 import QuickActions from "../../components/dashboard/QuickActions";
 
-import LatestInternships from "../../components/dashboard/LatestInternships";
-
-import RecentApplications from "../../components/dashboard/RecentApplications";
-
-import ProfileCompletion from "../../components/dashboard/ProfileCompletion";
-
-import Notifications from "../../components/dashboard/Notifications";
-
-import NotificationBell from "../../components/dashboard/NotificationBell";
-
-import RecommendedInternships from "../../components/dashboard/RecommendedInternships";
-
-
-
 function Dashboard() {
-
     return (
-
         <DashboardLayout>
+            <div className="space-y-4">
+                {/* Header Welcome Banner */}
+                <WelcomeBanner />
 
-            <WelcomeBanner />
+                {/* KPI Metrics Dashboard Grid */}
+                <SummaryCards />
 
-            <SummaryCards />
+                {/* Primary Dashboard Content Layout */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
+                    {/* Left Column: Recommendations & Applications */}
+                    <div className="lg:col-span-2 space-y-4">
+                        <RecommendedInternships />
+                        <RecentApplications />
+                    </div>
 
-            <div className="grid lg:grid-cols-2 gap-8">
-
-                <LatestInternships />
-
-                <ProfileCompletion />
-
+                    {/* Right Column: Profile Completion, Actions, and Latest Openings */}
+                    <div className="space-y-4">
+                        <ProfileCompletion />
+                        <QuickActions />
+                        <LatestInternships />
+                    </div>
+                </div>
             </div>
-
-            <RecommendedInternships />
-
-            <RecentApplications />
-
-            <Notifications />
-
-            <QuickActions />
-
         </DashboardLayout>
-
     );
-
 }
 
 export default Dashboard;

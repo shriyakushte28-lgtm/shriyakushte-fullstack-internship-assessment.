@@ -1,89 +1,64 @@
 import FeatureCard from "../cards/FeatureCard";
 
-const features=[
-
-{
-icon:"📄",
-title:"Resume Upload",
-description:"Upload and manage your resume."
-},
-
-{
-icon:"🏢",
-title:"Verified Companies",
-description:"Apply only to trusted recruiters."
-},
-
-{
-icon:"📊",
-title:"Application Tracking",
-description:"Track every internship application."
-},
-
-{
-icon:"🔔",
-title:"Notifications",
-description:"Never miss deadlines or updates."
-},
-
-{
-icon:"👨‍💼",
-title:"Interview Scheduling",
-description:"View upcoming interviews easily."
-},
-
-{
-icon:"🔒",
-title:"Secure Platform",
-description:"Protected using JWT Authentication."
-}
-
+const features = [
+    {
+        icon: "📄",
+        title: "Resume Matching",
+        description: "Upload and audit your resume dynamically against target internship skills."
+    },
+    {
+        icon: "🏢",
+        title: "Verified Companies",
+        description: "Explore opportunities only from trust-verified recruiters."
+    },
+    {
+        icon: "📊",
+        title: "Application Timelines",
+        description: "Track every step of your submissions in a real-time progress flow."
+    },
+    {
+        icon: "🔔",
+        title: "Instant Notifications",
+        description: "Get alerts on status updates, interview schedules, and deadlines."
+    },
+    {
+        icon: "👨‍💼",
+        title: "Interview Scheduling",
+        description: "Organize upcoming recruiter interviews in a unified queue."
+    },
+    {
+        icon: "🔒",
+        title: "Secure Verification",
+        description: "Access and authenticate role permissions safely with JWT tokens."
+    }
 ];
 
-function WhyChooseUs(){
+function WhyChooseUs() {
+    return (
+        <section className="py-16 bg-white border-b border-slate-200">
+            <div className="max-w-7xl mx-auto px-6">
+                <div className="text-center max-w-xl mx-auto mb-10">
+                    <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">
+                        Why Students Use InternSphere
+                    </h2>
+                    <p className="text-sm text-slate-500 mt-2">
+                        Equipped with core tools to match, apply, and monitor active internship pipelines.
+                    </p>
+                </div>
 
-return(
-
-<section className="bg-slate-50 py-24">
-
-<div className="max-w-7xl mx-auto px-8">
-
-<h2 className="text-4xl font-bold text-center">
-
-Why Choose InternSphere
-
-</h2>
-
-<div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-14">
-
-{
-
-features.map((feature,index)=>(
-
-<FeatureCard
-
-key={index}
-
-icon={feature.icon}
-
-title={feature.title}
-
-description={feature.description}
-
-/>
-
-))
-
-}
-
-</div>
-
-</div>
-
-</section>
-
-)
-
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {features.map((feature, index) => (
+                        <FeatureCard
+                            key={index}
+                            icon={feature.icon}
+                            title={feature.title}
+                            description={feature.description}
+                        />
+                    ))}
+                </div>
+            </div>
+        </section>
+    );
 }
 
 export default WhyChooseUs;

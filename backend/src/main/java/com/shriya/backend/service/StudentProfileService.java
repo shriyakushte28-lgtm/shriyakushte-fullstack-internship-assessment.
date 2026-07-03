@@ -111,7 +111,6 @@ public List<StudentSummaryResponse> getAllStudents() {
             .stream()
             .map(profile -> StudentSummaryResponse.builder()
                     .id(profile.getId())
-                    .userId(profile.getUser().getId())
                     .fullName(profile.getFullName())
                     .email(profile.getUser().getEmail())
                     .college(profile.getCollege())
