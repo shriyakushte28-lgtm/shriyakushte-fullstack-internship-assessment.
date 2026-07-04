@@ -6,10 +6,12 @@ import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 
 @Service
 public class EmailService {
@@ -17,11 +19,10 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    @Autowired
 private TemplateEngine templateEngine;
 
     @Value("${spring.mail.username}")
-private String FROM_EMAIL;
+        private String FROM_EMAIL;
 
     private void sendTemplateEmail(
         String to,
@@ -78,39 +79,27 @@ private void sendEmail(
         MimeMessage message = mailSender.createMimeMessage();
 
         MimeMessageHelper helper =
-                new MimeMessageHelper(
-                        message,
-                        true,
-                        "UTF-8"
-                );
+                new MimeMessageHelper(message, true, "UTF-8");
 
         helper.setFrom(FROM_EMAIL);
         helper.setTo(to);
         helper.setSubject(subject);
-
-        // false = plain text email
         helper.setText(body, false);
 
         mailSender.send(message);
 
         System.out.println("Email sent successfully to: " + to);
 
-    } catch (MessagingException e) {
+    } catch (Exception e) {
 
-        System.err.println(
-                "Failed to send email to: " + to
-        );
-
-        throw new RuntimeException(
-                "Failed to send email",
-                e
-        );
+        System.err.println("Failed to send email to: " + to);
+        e.printStackTrace();
     }
 }
     // ===================================================
     // Welcome Email
     // ===================================================
-
+    @Async
     public void sendWelcomeEmail(String name, String email) {
 
         String subject = "🎉 Welcome to InternSphere";
@@ -141,7 +130,7 @@ private void sendEmail(
     // ===================================================
     // Application Submitted
     // ===================================================
-
+    @Async
     public void sendApplicationSubmittedEmail(Application application) {
 
         String email =
@@ -184,7 +173,7 @@ private void sendEmail(
     // ===================================================
     // Shortlisted
     // ===================================================
-
+    @Async
     public void sendShortlistedEmail(Application application) {
 
         String email =
@@ -224,7 +213,7 @@ private void sendEmail(
     // ===================================================
     // Accepted
     // ===================================================
-
+    @Async
     public void sendAcceptedEmail(Application application) {
 
         String email =
@@ -265,7 +254,7 @@ private void sendEmail(
     // ===================================================
     // Rejected
     // ===================================================
-
+    @Async
     public void sendRejectedEmail(Application application) {
 
         String email =
