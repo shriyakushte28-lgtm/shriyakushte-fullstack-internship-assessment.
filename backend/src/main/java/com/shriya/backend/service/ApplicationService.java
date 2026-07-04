@@ -27,6 +27,7 @@ public class ApplicationService {
     private final StudentProfileRepository studentProfileRepository;
     private final InternshipRepository internshipRepository;
     private final NotificationService notificationService;
+    private final EmailService emailService;
 
     public Application apply(ApplicationRequest request) {
 
@@ -56,15 +57,23 @@ if (alreadyApplied) {
                 .orElseThrow(() -> new RuntimeException("Internship not found"));
 
         Application application = Application.builder()
-                .student(student)
-                .internship(internship)
-                .coverLetter(request.getCoverLetter())
-                .resumeUrl(request.getResumeUrl())
-                .status(ApplicationStatus.PENDING)
-                .appliedAt(LocalDateTime.now())
-                .build();
+        .student(student)
+        .internship(internship)
+        .coverLetter(request.getCoverLetter())
+        .resumeUrl(request.getResumeUrl())
+        .status(ApplicationStatus.PENDING)
+        .appliedAt(LocalDateTime.now())
+        .build();
 
-        return applicationRepository.save(application);
+Application savedApplication = applicationRepository.save(application);
+
+try {
+    emailService.sendApplicationSubmittedEmail(savedApplication);
+} catch (Exception e) {
+    e.printStackTrace();
+}
+
+return savedApplication;
 }
 
     public List<Application> getUserApplications(Long userId) {
@@ -114,6 +123,12 @@ if (alreadyApplied) {
                                 + "."
                 );
 
+                try {
+    emailService.sendShortlistedEmail(savedApplication);
+} catch (Exception e) {
+    e.printStackTrace();
+}
+
                 break;
 
             case ACCEPTED:
@@ -128,6 +143,12 @@ if (alreadyApplied) {
                                 + " has been accepted."
                 );
 
+                try {
+    emailService.sendAcceptedEmail(savedApplication);
+} catch (Exception e) {
+    e.printStackTrace();
+}
+
                 break;
 
             case REJECTED:
@@ -141,6 +162,12 @@ if (alreadyApplied) {
                                 + application.getInternship().getCompanyName()
                                 + " was not selected."
                 );
+
+                try {
+    emailService.sendRejectedEmail(savedApplication);
+} catch (Exception e) {
+    e.printStackTrace();
+}
 
                 break;
 

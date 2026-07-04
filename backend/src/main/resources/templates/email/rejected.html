@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body style="background:#f3f4f6;padding:30px;font-family:Arial;">
+
+<div style="max-width:650px;margin:auto;background:white;border-radius:10px;overflow:hidden;">
+
+<div th:replace="email/fragments/header :: header"></div>
+
+<div style="padding:40px;">
+
+<h2 style="color:#dc2626;">
+Application Update
+</h2>
+
+<p>
+
+Hello <strong th:text="${name}"></strong>,
+
+</p>
+
+<p>
+
+Thank you for applying for
+
+<strong th:text="${internship}"></strong>
+
+at
+
+<strong th:text="${company}"></strong>.
+
+</p>
+
+<p>
+
+Unfortunately,
+
+this application was not selected.
+
+</p>
+
+<p>
+
+Please continue applying.
+
+New internships are added regularly.
+
+</p>
+
+<div style="margin-top:30px;">
+<div th:replace="email/fragments/button :: button('Browse Internships','http://localhost:5173/internships')"></div>
+</div>
+
+</div>
+
+<div th:replace="email/fragments/footer :: footer"></div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body style="background:#f3f4f6;padding:30px;font-family:Arial;">
+
+<div style="max-width:650px;margin:auto;background:white;border-radius:10px;overflow:hidden;">
+
+<div th:replace="email/fragments/header :: header"></div>
+
+<div style="padding:40px;">
+
+<h2 style="color:#16a34a;">
+Congratulations! 🎉
+</h2>
+
+<p>
+Hello <strong th:text="${name}"></strong>,
+</p>
+
+<p>
+
+You have been shortlisted for the internship below.
+
+</p>
+
+<h3 th:text="${internship}"></h3>
+
+<p>
+
+Company:
+<strong th:text="${company}"></strong>
+
+</p>
+
+<p>
+
+Location:
+<strong th:text="${location}"></strong>
+
+</p>
+
+<div style="margin-top:30px;">
+<div th:replace="email/fragments/button :: button('Open Dashboard','http://localhost:5173/dashboard')"></div>
+</div>
+
+</div>
+
+<div th:replace="email/fragments/footer :: footer"></div>
+
+</div>
+
+</body>
+</html>

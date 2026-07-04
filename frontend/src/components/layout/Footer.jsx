@@ -5,9 +5,11 @@ function Footer() {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                     <div>
                         <div className="flex items-center gap-2">
-                            <div className="h-6 w-6 rounded bg-blue-600 flex items-center justify-center text-white font-bold text-xs shadow-sm">
-                                I
-                            </div>
+                            <img
+    src="/logo.png"
+    alt="InternSphere"
+    className="h-10 w-10"
+/>
                             <span className="text-sm font-bold text-white tracking-tight">
                                 InternSphere
                             </span>

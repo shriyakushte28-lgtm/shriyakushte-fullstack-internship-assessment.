@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<a
+
+th:fragment="button(text,url)"
+
+th:href="${url}"
+
+style="
+display:inline-block;
+padding:14px 28px;
+background:#2563eb;
+color:white;
+text-decoration:none;
+border-radius:8px;
+font-family:Arial;
+font-weight:bold;
+">
+
+<span th:text="${text}"></span>
+
+</a>
+
+</body>
+
+</html>

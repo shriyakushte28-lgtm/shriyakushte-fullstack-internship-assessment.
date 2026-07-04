@@ -18,8 +18,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        System.out.println("===== MY SECURITY CONFIG IS LOADED =====");
-
         http
                 .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
@@ -34,6 +32,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/saved/**").permitAll()
                         .requestMatchers("/api/resume/**").permitAll()
                         .requestMatchers("/uploads/**").permitAll()
+                        .requestMatchers("/api/test-email").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(httpBasic -> httpBasic.disable());

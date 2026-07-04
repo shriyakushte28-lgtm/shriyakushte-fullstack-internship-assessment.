@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body style="background:#f3f4f6;padding:30px;font-family:Arial;">
+
+<div style="max-width:650px;margin:auto;background:white;border-radius:10px;overflow:hidden;">
+
+<div th:replace="email/fragments/header :: header"></div>
+
+<div style="padding:40px;">
+
+<h2 style="color:#16a34a;">
+Application Accepted 🎉
+</h2>
+
+<p>
+
+Hello <strong th:text="${name}"></strong>,
+
+</p>
+
+<p>
+
+Congratulations!
+
+Your application has been accepted.
+
+</p>
+
+<table style="margin-top:25px;">
+
+<tr>
+
+<td><strong>Company</strong></td>
+
+<td th:text="${company}"></td>
+
+</tr>
+
+<tr>
+
+<td><strong>Role</strong></td>
+
+<td th:text="${internship}"></td>
+
+</tr>
+
+<tr>
+
+<td><strong>Location</strong></td>
+
+<td th:text="${location}"></td>
+
+</tr>
+
+</table>
+
+<div style="margin-top:30px;">
+<div th:replace="email/fragments/button :: button('View Dashboard','http://localhost:5173/dashboard')"></div>
+</div>
+
+</div>
+
+<div th:replace="email/fragments/footer :: footer"></div>
+
+</div>
+
+</body>
+</html>

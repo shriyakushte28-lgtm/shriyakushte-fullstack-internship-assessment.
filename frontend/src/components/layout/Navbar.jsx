@@ -6,9 +6,11 @@ function Navbar() {
             <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
                 {/* Brand Logo */}
                 <Link to="/" className="flex items-center gap-2">
-                    <div className="h-7 w-7 rounded bg-blue-600 flex items-center justify-center text-white font-bold text-sm shadow-sm">
-                        I
-                    </div>
+                    <img
+    src="/logo.png"
+    alt="InternSphere"
+    className="h-10 w-10"
+/>
                     <span className="text-sm font-bold tracking-tight text-slate-900">
                         InternSphere
                     </span>
