@@ -9,6 +9,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+import org.springframework.beans.factory.annotation.Value;
 
 @Service
 public class EmailService {
@@ -19,7 +20,8 @@ public class EmailService {
     @Autowired
 private TemplateEngine templateEngine;
 
-    private final String FROM_EMAIL = "shriyakushte28@gmail.com";
+    @Value("${spring.mail.username}")
+private String FROM_EMAIL;
 
     private void sendTemplateEmail(
         String to,

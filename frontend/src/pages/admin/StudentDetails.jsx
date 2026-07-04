@@ -132,7 +132,7 @@ function StudentDetails() {
                                             <p className="font-semibold">Resume Uploaded</p>
                                         </div>
                                         <a
-                                            href={`http://localhost:8080${student.resumeUrl}`}
+                                            href={student.resumeUrl}
                                             target="_blank"
                                             rel="noreferrer"
                                             className="btn-secondary w-full py-1.5 px-3 text-xs"

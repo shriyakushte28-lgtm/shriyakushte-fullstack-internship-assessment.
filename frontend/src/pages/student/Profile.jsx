@@ -5,6 +5,8 @@ import { uploadResume } from "../../services/resumeService";
 import { getUser } from "../../services/userService";
 import { User, Phone, GraduationCap, Calendar, FileText, Upload, Check, Edit2, CheckCircle2, Mail, Compass, Award } from "lucide-react";
 import toast from "react-hot-toast";
+import SkeletonProfile from "../../components/skeletons/SkeletonProfile";
+
 
 function Profile() {
     const userId = Number(localStorage.getItem("userId"));
@@ -133,14 +135,12 @@ function Profile() {
     }
 
     if (loading) {
-        return (
-            <DashboardLayout>
-                <div className="flex items-center justify-center min-h-[400px]">
-                    <div className="text-sm font-semibold text-slate-500 animate-pulse">Loading profile credentials...</div>
-                </div>
-            </DashboardLayout>
-        );
-    }
+    return (
+        <DashboardLayout>
+            <SkeletonProfile />
+        </DashboardLayout>
+    );
+}
 
     return (
         <DashboardLayout>
@@ -415,7 +415,7 @@ function Profile() {
                                             </div>
                                         </div>
                                         <a
-                                            href={`http://localhost:8080${formData.resumeUrl}`}
+                                            href={formData.resumeUrl}
                                             target="_blank"
                                             rel="noreferrer"
                                             className="btn-secondary w-full py-1.5 px-3 text-xs"
