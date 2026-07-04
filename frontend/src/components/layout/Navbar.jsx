@@ -4,36 +4,78 @@ function Navbar() {
     return (
         <nav className="w-full bg-white border-b border-slate-200 sticky top-0 z-50">
             <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+
                 {/* Brand Logo */}
-                <Link to="/" className="flex items-center gap-2">
+                <Link
+                    to="/"
+                    className="flex items-center gap-2"
+                >
                     <img
-    src="/logo.png"
-    alt="InternSphere"
-    className="h-10 w-10"
-/>
+                        src="/logo.png"
+                        alt="InternSphere"
+                        className="h-10 w-10"
+                    />
+
                     <span className="text-sm font-bold tracking-tight text-slate-900">
                         InternSphere
                     </span>
                 </Link>
 
-                {/* Nav Links */}
+
+                {/* Navigation Links */}
                 <ul className="hidden md:flex items-center gap-6 text-xs font-semibold text-slate-500">
+
                     <li>
-                        <Link to="/" className="hover:text-slate-900 transition-colors">Home</Link>
+                        <Link
+                            to="/"
+                            className="hover:text-slate-900 transition-colors"
+                        >
+                            Home
+                        </Link>
                     </li>
+
                     <li>
-                        <Link to="/" className="hover:text-slate-900 transition-colors">Browse Internships</Link>
+                        <Link
+                            to="/internships"
+                            className="hover:text-slate-900 transition-colors"
+                        >
+                            Browse Internships
+                        </Link>
                     </li>
+
                     <li>
-                        <Link to="/" className="hover:text-slate-900 transition-colors">About Portal</Link>
+                        <Link
+                            to="/about"
+                            className="hover:text-slate-900 transition-colors"
+                        >
+                            About Portal
+                        </Link>
                     </li>
+
                     <li>
-                        <Link to="/" className="hover:text-slate-900 transition-colors">Contact Support</Link>
+                        <Link
+                            to="/contact"
+                            className="hover:text-slate-900 transition-colors"
+                        >
+                            Contact Support
+                        </Link>
                     </li>
+
+                    <li>
+                        <Link
+                            to="/support"
+                            className="hover:text-slate-900 transition-colors"
+                        >
+                            Help
+                        </Link>
+                    </li>
+
                 </ul>
 
-                {/* Actions */}
+
+                {/* Authentication Actions */}
                 <div className="flex items-center gap-2">
+
                     <Link
                         to="/login"
                         className="btn-secondary py-1.5 px-3 text-xs"
@@ -47,7 +89,9 @@ function Navbar() {
                     >
                         Create Account
                     </Link>
+
                 </div>
+
             </div>
         </nav>
     );

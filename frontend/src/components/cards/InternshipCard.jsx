@@ -5,18 +5,31 @@ import { getInternshipMatch } from "../../services/internshipService";
 
 function InternshipCard({ internship }) {
     const navigate = useNavigate();
-    const userId = Number(localStorage.getItem("userId"));
+    const token = localStorage.getItem("token");
+
+const userId = token
+    ? Number(localStorage.getItem("userId"))
+    : null;
     const [matchScore, setMatchScore] = useState(null);
 
     useEffect(() => {
-        if (userId && internship.id) {
-            getInternshipMatch(internship.id, userId)
-                .then(res => {
-                    setMatchScore(res.data.matchScore);
-                })
-                .catch(() => {});
-        }
-    }, [internship.id, userId]);
+    if (token && userId && internship.id) {
+
+        getInternshipMatch(
+            internship.id,
+            userId
+        )
+            .then((res) => {
+                setMatchScore(
+                    res.data.matchScore
+                );
+            })
+            .catch(() => {
+                setMatchScore(null);
+            });
+    }
+
+}, [internship.id, userId, token]);
 
     const getStatusStyle = (status) => {
         if (status === "OPEN" || status === "ACTIVE") {

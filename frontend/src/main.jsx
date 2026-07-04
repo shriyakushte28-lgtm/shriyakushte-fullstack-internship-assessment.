@@ -27,6 +27,9 @@ import MySavedInternships from "./pages/student/MySavedInternships";
 import AdminProfile from "./pages/admin/AdminProfile";
 import AdminSettings from "./pages/admin/AdminSettings";
 import NotFound from "./pages/public/NotFound";
+import About from "./pages/public/About";
+import Contact from "./pages/public/Contact";
+import Support from "./pages/public/Support";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -193,6 +196,12 @@ createRoot(document.getElementById("root")).render(
         </ProtectedRoute>
     }
 />
+
+<Route path="/about" element={<About />} />
+
+<Route path="/contact" element={<Contact />} />
+
+<Route path="/support" element={<Support />} />
 
 <Route path="*" element={<NotFound />} />
 

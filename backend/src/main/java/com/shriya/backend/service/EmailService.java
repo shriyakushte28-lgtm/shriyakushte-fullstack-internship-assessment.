@@ -65,6 +65,46 @@ private TemplateEngine templateEngine;
     }
 
 }
+
+private void sendEmail(
+        String to,
+        String subject,
+        String body
+) {
+    try {
+
+        MimeMessage message = mailSender.createMimeMessage();
+
+        MimeMessageHelper helper =
+                new MimeMessageHelper(
+                        message,
+                        true,
+                        "UTF-8"
+                );
+
+        helper.setFrom(FROM_EMAIL);
+        helper.setTo(to);
+        helper.setSubject(subject);
+
+        // false = plain text email
+        helper.setText(body, false);
+
+        mailSender.send(message);
+
+        System.out.println("Email sent successfully to: " + to);
+
+    } catch (MessagingException e) {
+
+        System.err.println(
+                "Failed to send email to: " + to
+        );
+
+        throw new RuntimeException(
+                "Failed to send email",
+                e
+        );
+    }
+}
     // ===================================================
     // Welcome Email
     // ===================================================

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DashboardLayout from "../../layouts/DashboardLayout";
+import ConfirmModal from "../../components/common/ConfirmModal";
 import { getUser, updateUser, changePassword } from "../../services/userService";
 import { Settings as SettingsIcon, User, Shield, LogOut, Check, Save } from "lucide-react";
 import toast from "react-hot-toast";

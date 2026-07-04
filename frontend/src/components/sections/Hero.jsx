@@ -25,7 +25,7 @@ function Hero() {
 
                     <div className="flex flex-wrap gap-3">
                         <button
-                            onClick={() => navigate("/register")}
+                            onClick={() => navigate("/internships")}
                             className="btn-primary py-2.5 px-5 text-sm"
                         >
                             <span>Browse Internships</span>
